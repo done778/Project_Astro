@@ -80,6 +80,7 @@ crashlytics-build.properties
 
 # Third-party Assets
 /[Aa]ssets/SecurityAssets/
+/[Aa]ssets/Plugins/Demigiant/
 
 # Visual Studio Code (VSC)
 .vscode/
@@ -132,3 +133,10 @@ crashlytics-build.properties
 # iOS용 설정
 /[Aa]ssets/GoogleService-Info.plist
 /[Aa]ssets/GoogleService-Info.plist.meta
+
+
+# =========================================================================
+# Photon Fusion Package Files
+# =========================================================================
+
+/[Aa]ssets/Photon/
