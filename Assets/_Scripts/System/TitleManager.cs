@@ -1,6 +1,9 @@
 ﻿using Firebase;
 using Firebase.Auth;
 using Firebase.Extensions;
+using Firebase.Firestore;
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,8 +15,11 @@ public class TitleManager : MonoBehaviour
     public FirebaseAuth auth; // 인증을 위한 객체
     public FirebaseUser user; // 인증된 유저 정보
 
-    void Start()
+    FirebaseFirestore _database;
+
+    void Awake()
     {
+        _database = FirebaseFirestore.DefaultInstance;
         Init();
     }
 
@@ -81,5 +87,62 @@ public class TitleManager : MonoBehaviour
 
                 user = task.Result.User;
             });
+    }
+
+    public void TryToFirestoreCreate()
+    {
+        DocumentReference docRef = _database.Collection("users").Document("alovelace");
+        Dictionary<string, object> dict = new Dictionary<string, object>
+        {
+            {"First", "Ada" },
+            {"Last", "Lovelace" },
+            {"Born", 1815 }
+        };
+
+        docRef.SetAsync(dict).ContinueWithOnMainThread(task =>
+        {
+            Debug.Log("alovelace 유저 데이터 저장됨.");
+        });
+    }
+
+    public void TryToFirestoreAdd()
+    {
+        DocumentReference docRef = _database.Collection("users").Document("aturing");
+        Dictionary<string, object> dict = new Dictionary<string, object>
+        {
+            {"First", "Alan" },
+            { "Middle", "Mathison" },
+            {"Last", "Turing" },
+            {"Born", 1912 }
+        };
+
+        docRef.SetAsync(dict).ContinueWithOnMainThread(task =>
+        {
+            Debug.Log("aturing 유저 데이터 저장됨.");
+        });
+    }
+
+    public void TryToFirestoreRead() 
+    {
+        CollectionReference usersRef = _database.Collection("users");
+        usersRef.GetSnapshotAsync().ContinueWithOnMainThread(task =>
+        {
+            QuerySnapshot snapshot = task.Result;
+            foreach (DocumentSnapshot document in snapshot.Documents)
+            {
+                Debug.Log(string.Format("User: {0}", document.Id));
+                Dictionary<string, object> documentDictionary = document.ToDictionary();
+                Debug.Log(String.Format("First: {0}", documentDictionary["First"]));
+                if (documentDictionary.ContainsKey("Middle"))
+                {
+                    Debug.Log(String.Format("Middle: {0}", documentDictionary["Middle"]));
+                }
+
+                Debug.Log(String.Format("Last: {0}", documentDictionary["Last"]));
+                Debug.Log(String.Format("Born: {0}", documentDictionary["Born"]));
+            }
+
+            Debug.Log("Read all data from the users collection.");
+        });
     }
 }
