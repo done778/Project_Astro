@@ -33,7 +33,7 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
         _nextScanTime = Time.time + Random.Range(0f, scanInterval);
     }
 
-    //public override void Spawned()//Spawn 완료됐을 때 호출되는 Fusion 콜백
+    //public override void Spawned()//Spawn 완료됐을 때 호출되는 Fusion 콜백, 네트워크 연결전이라 주석처리
     //{
     //    //AI 판단은 State Authority를 가진 클라이언트만 수행(PUN의 마스터클라이언트와 유사)
     //    if (!Object.HasStateAuthority)
@@ -79,7 +79,7 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
 
     protected bool FindTarget()//가까운 적 거리 기준 찾기
     {
-        //float now = (float)Runner.SimulationTime;
+        //float now = (float)Runner.SimulationTime; //네트워크 연결전이라 주석처리
         //if (now < _nextScanTime)
         //{
         //    return currentTarget != null;

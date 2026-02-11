@@ -8,7 +8,7 @@ using Fusion;
 public class HeroAI : BaseAutoBattleAI
 {
     [Header("Advance")]
-    [SerializeField] private Transform _enemyBase; // 전진 목표
+    [SerializeField] private Transform _enemyBase;//전진 목표
 
     //영웅 전용 데이터 (Stat / Role / Skill 등) 추가 예정
 
@@ -21,7 +21,7 @@ public class HeroAI : BaseAutoBattleAI
         }
     }
 
-    //public override void Spawned()
+    //public override void Spawned()//네트워크 연결전이라 주석처리
     //{
     //    base.Spawned();
 
@@ -53,7 +53,7 @@ public class HeroAI : BaseAutoBattleAI
 
     private void UpdateAdvance()
     {
-        //if (!HasAdvancePoint())
+        //if (!HasAdvancePoint())//네트워크 연결전이라 주석처리
         //{
         //    return;
         //}

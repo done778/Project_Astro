@@ -20,7 +20,7 @@ public class MinionAI : BaseAutoBattleAI
         }
     }
 
-    //public override void Spawned()
+    //public override void Spawned() //네트워크 연결전이라 주석처리
     //{
     //    base.Spawned();
 
@@ -53,7 +53,7 @@ public class MinionAI : BaseAutoBattleAI
 
     private void UpdateAdvance()
     {
-        //if (!HasAdvancePoint())
+        //if (!HasAdvancePoint())//네트워크 연결전이라 주석처리
         //{
         //    return;
         //}
