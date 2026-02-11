@@ -5,6 +5,11 @@ using Fusion;
 //일단 임의로 상태 분리해둠
 public enum AutoBattleState { Advance, Search, Return }
 
+/// <summary>
+/// 자동 전투 공통 AI로직 담당
+/// 상태 전환,탐지,이동, 유효성 검사
+/// 상태별 행동은 파생 클래스에서 구현
+/// </summary>
 public abstract class BaseAutoBattleAI : NetworkBehaviour
 {
     [Header("네비")]
@@ -17,6 +22,7 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
 
     protected AutoBattleState currentState;
     protected Transform currentTarget;
+    protected Vector3 advancePoint;//목표 지점
 
     private float _nextScanTime;
 
@@ -28,13 +34,19 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
 
     public override void Spawned()
     {
+        //AI 판단은 State Authority를 가진 클라이언트만 수행(PUN의 마스터클라이언트와 유사)
+        if (!Object.HasStateAuthority)
+        {
+            return;
+        }
+
         //첫 스캔 시점을 동일하지 않게(순간적인 프레임드랍 방지)
-        _nextScanTime = Time.time + Random.Range(0f, scanInterval);
+        float now = (float)Runner.SimulationTime;
+        _nextScanTime = now + Random.Range(0f, scanInterval);
     }
 
     public override void FixedUpdateNetwork()
     {
-        //AI 판단은 State Authority를 가진 클라이언트만 수행(PUN의 마스터클라이언트와 유사한듯?)
         if (!Object.HasStateAuthority)
         {
             return;
@@ -43,23 +55,35 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
         UpdateState();
     }
 
-    protected abstract void UpdateState();//상태 업데이트
+    protected abstract void UpdateState();//상태 업데이트(파생클래스에서 구현)
 
-    protected void FindTarget()//가까운 적 거리 기준 찾기
+    protected void ChangeState(AutoBattleState nextState)//상태 전환 메서드
     {
-        if (Time.time < _nextScanTime)
+        if (currentState == nextState)
         {
             return;
         }
 
-        _nextScanTime = Time.time + scanInterval;
+        StopMove();
+        currentState = nextState;
+    }
+
+    protected bool FindTarget()//가까운 적 거리 기준 찾기
+    {
+        float now = (float)Runner.SimulationTime;
+        if (now < _nextScanTime)
+        {
+            return currentTarget != null;
+        }
+
+        _nextScanTime = now + scanInterval;
 
         Collider[] hits = Physics.OverlapSphere(transform.position, detectRadius, targetLayer);
 
         if (hits.Length == 0)
         {
             currentTarget = null;
-            return;
+            return false;
         }
 
         float minDistance = float.MaxValue;
@@ -77,6 +101,22 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
         }
 
         currentTarget = closest;
+        return currentTarget != null;
+    }
+
+    protected bool IsTargetValid()//타겟 확인용 메서드
+    {
+        if (currentTarget == null)
+        {
+            return false;
+        }
+
+        return currentTarget.gameObject.activeInHierarchy;
+    }
+
+    protected bool HasAdvancePoint()//목표 확인용 메서드
+    {
+        return advancePoint != Vector3.zero;
     }
 
     protected virtual void MoveTo(Vector3 destination)
@@ -87,7 +127,19 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
             return;
         }
 
+        agent.isStopped = false;
         agent.SetDestination(destination);
+    }
+
+    protected virtual void StopMove()
+    {
+        if (agent == null || !agent.enabled)
+        {
+            return;
+        }
+
+        agent.isStopped = true;
+        agent.ResetPath();
     }
 
 #if UNITY_EDITOR
