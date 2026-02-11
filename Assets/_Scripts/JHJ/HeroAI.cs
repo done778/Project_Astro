@@ -1,15 +1,16 @@
 using UnityEngine;
 using Fusion;
 
+
 /// <summary>
-/// 미니언 자동 전투 AI
+/// 영웅 자동 전투 AI
 /// </summary>
-public class MinionAI : BaseAutoBattleAI
+public class HeroAI : BaseAutoBattleAI
 {
     [Header("Advance")]
-    [SerializeField] private Transform _enemyBase;//전진목표
+    [SerializeField] private Transform _enemyBase; // 전진 목표
 
-    //미니언 전용 데이터 추가 예정
+    //영웅 전용 데이터 (Stat / Role / Skill 등) 추가 예정
 
     protected override void Awake()
     {
@@ -45,9 +46,8 @@ public class MinionAI : BaseAutoBattleAI
                 break;
 
             case AutoBattleState.Combat:
-                UpdateSearch();
+                UpdateCombat();
                 break;
-
         }
     }
 
@@ -60,25 +60,22 @@ public class MinionAI : BaseAutoBattleAI
 
         MoveTo(advancePoint);
 
-        //이동 중 적 탐지
         if (FindTarget())
         {
             ChangeState(AutoBattleState.Combat);
         }
     }
 
-    private void UpdateSearch()
+    private void UpdateCombat()
     {
-        //타겟이 유효하지 않으면 다시 이동
         if (!IsTargetValid())
         {
             ChangeState(AutoBattleState.Advance);
             return;
         }
 
-        //아직은 공격로직이 없음(공격로직이 생기면 추가할 위치)
+        //영웅 전용 전투 로직 (스킬 / 역활 기반 분기) 추가 예정
 
-        //타겟으로 이동
         MoveTo(currentTarget.position);
     }
 

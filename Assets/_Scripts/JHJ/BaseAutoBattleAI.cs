@@ -30,29 +30,38 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
     {
         //기본 상태는 전진
         currentState = AutoBattleState.Advance;
+        _nextScanTime = Time.time + Random.Range(0f, scanInterval);
     }
 
-    public override void Spawned()//Spawn 완료됐을 때 호출되는 Fusion 콜백
+    //public override void Spawned()//Spawn 완료됐을 때 호출되는 Fusion 콜백
+    //{
+    //    //AI 판단은 State Authority를 가진 클라이언트만 수행(PUN의 마스터클라이언트와 유사)
+    //    if (!Object.HasStateAuthority)
+    //    {
+    //        return;
+    //    }
+
+    //    //첫 스캔 시점을 동일하지 않게(순간적인 프레임드랍 방지)
+    //    float now = (float)Runner.SimulationTime;
+    //    _nextScanTime = now + Random.Range(0f, scanInterval);
+    //}
+
+    //public override void FixedUpdateNetwork()
+    //{
+    //    //if (!Object.HasStateAuthority)
+    //    //{
+    //    //    return;
+    //    //}
+
+    //    UpdateState();
+    //}
+
+    private void Update()//네트워크 적용전 업데이트로 테스트
     {
-        //AI 판단은 State Authority를 가진 클라이언트만 수행(PUN의 마스터클라이언트와 유사)
-        if (!Object.HasStateAuthority)
+        if (Runner == null)
         {
-            return;
+            UpdateState();
         }
-
-        //첫 스캔 시점을 동일하지 않게(순간적인 프레임드랍 방지)
-        float now = (float)Runner.SimulationTime;
-        _nextScanTime = now + Random.Range(0f, scanInterval);
-    }
-
-    public override void FixedUpdateNetwork()
-    {
-        if (!Object.HasStateAuthority)
-        {
-            return;
-        }
-
-        UpdateState();
     }
 
     protected abstract void UpdateState();//상태 업데이트(파생클래스에서 구현)
@@ -70,13 +79,20 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
 
     protected bool FindTarget()//가까운 적 거리 기준 찾기
     {
-        float now = (float)Runner.SimulationTime;
-        if (now < _nextScanTime)
+        //float now = (float)Runner.SimulationTime;
+        //if (now < _nextScanTime)
+        //{
+        //    return currentTarget != null;
+        //}
+
+        //_nextScanTime = now + scanInterval;
+
+        if (Time.time < _nextScanTime)
         {
             return currentTarget != null;
         }
 
-        _nextScanTime = now + scanInterval;
+        _nextScanTime = Time.time + scanInterval;
 
         Collider[] hits = Physics.OverlapSphere(transform.position, detectRadius, targetLayer);
 
