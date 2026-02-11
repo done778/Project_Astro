@@ -1,14 +1,6 @@
-﻿using System;
+﻿using Firebase.Firestore;
+using System;
 using UnityEngine;
-
-// 회원가입 입력 데이터
-public struct SignUpData
-{
-    public string email;
-    public string password;
-    public string passwordConfirm;
-    public string nickname;
-}
 
 // 회원가입 비즈니스 로직
 public class SignUpController : MonoBehaviour
@@ -191,4 +183,13 @@ public class SignUpController : MonoBehaviour
             _ => "회원가입에 실패했습니다."
         };
     }
+}
+
+// 회원가입 입력 데이터
+public struct SignUpData
+{
+    public string email;
+    public string password;
+    public string passwordConfirm;
+    public string nickname;
 }
