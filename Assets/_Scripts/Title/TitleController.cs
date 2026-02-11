@@ -2,28 +2,34 @@
 using Firebase.Auth;
 using Firebase.Extensions;
 using Firebase.Firestore;
+using Fusion;
 using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TitleManager : MonoBehaviour
+public class TitleController : SimulationBehaviour
 {
     [SerializeField] private TMP_InputField emailField;
     [SerializeField] private TMP_InputField pwField;
-    public FirebaseAuth auth; // 인증을 위한 객체
-    public FirebaseUser user; // 인증된 유저 정보
+
+    [Header("Services")]
+    [SerializeField] private AuthService _authService;
+    [SerializeField] private UserDataStore _userDataStore;
+
+    public FirebaseAuth auth;
+    public FirebaseUser user;
 
     FirebaseFirestore _database;
 
     void Awake()
     {
         _database = FirebaseFirestore.DefaultInstance;
-        Init();
+        InitializeFirebase();
     }
 
-    private void Init()
+    private void InitializeFirebase()
     {
         FirebaseApp.CheckAndFixDependenciesAsync().
             ContinueWithOnMainThread(task =>
@@ -144,5 +150,10 @@ public class TitleManager : MonoBehaviour
 
             Debug.Log("Read all data from the users collection.");
         });
+    }
+
+    private void OnLoginCompleted(string nickname)
+    {
+        
     }
 }
