@@ -131,7 +131,6 @@ GameObject:
   - component: {fileID: 103740475}
   - component: {fileID: 103740474}
   - component: {fileID: 103740473}
-  - component: {fileID: 103740472}
   - component: {fileID: 103740471}
   - component: {fileID: 103740478}
   - component: {fileID: 103740477}
@@ -164,18 +163,6 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &103740472
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 103740470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f75aa65453f80149942b8be11d23c83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AutoBattleAI
 --- !u!136 &103740473
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -320,7 +307,6 @@ GameObject:
   - component: {fileID: 120615449}
   - component: {fileID: 120615448}
   - component: {fileID: 120615447}
-  - component: {fileID: 120615446}
   - component: {fileID: 120615445}
   - component: {fileID: 120615444}
   - component: {fileID: 120615443}
@@ -391,18 +377,6 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &120615446
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 120615442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f75aa65453f80149942b8be11d23c83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AutoBattleAI
 --- !u!136 &120615447
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1048,7 +1022,6 @@ GameObject:
   - component: {fileID: 1965399792}
   - component: {fileID: 1965399791}
   - component: {fileID: 1965399790}
-  - component: {fileID: 1965399789}
   - component: {fileID: 1965399788}
   - component: {fileID: 1965399787}
   - component: {fileID: 1965399786}
@@ -1119,18 +1092,6 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &1965399789
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1965399785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f75aa65453f80149942b8be11d23c83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AutoBattleAI
 --- !u!136 &1965399790
 CapsuleCollider:
   m_ObjectHideFlags: 0
