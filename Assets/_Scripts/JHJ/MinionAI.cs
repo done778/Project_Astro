@@ -1,15 +1,15 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using Fusion;
 
 /// <summary>
-/// ¹Ì´Ï¾ğ ÀÚµ¿ ÀüÅõ AI
+/// ë¯¸ë‹ˆì–¸ ìë™ ì „íˆ¬ AI
 /// </summary>
 public class MinionAI : BaseAutoBattleAI
 {
     [Header("Advance")]
-    [SerializeField] private Transform _enemyBase;//ÀüÁø¸ñÇ¥
+    [SerializeField] private Transform _enemyBase; //ì „ì§„ ëª©í‘œ
 
-    //¹Ì´Ï¾ğ Àü¿ë µ¥ÀÌÅÍ Ãß°¡ ¿¹Á¤
+    //ë¯¸ë‹ˆì–¸ ì „ìš© ë°ì´í„° ì¶”ê°€ ì˜ˆì •
 
     protected override void Awake()
     {
@@ -20,7 +20,7 @@ public class MinionAI : BaseAutoBattleAI
         }
     }
 
-    //public override void Spawned() //³×Æ®¿öÅ© ¿¬°áÀüÀÌ¶ó ÁÖ¼®Ã³¸®
+    //public override void Spawned() //ë„¤íŠ¸ì›Œí¬ ì—°ê²°ì „ì´ë¼ ì£¼ì„ì²˜ë¦¬
     //{
     //    base.Spawned();
 
@@ -29,7 +29,7 @@ public class MinionAI : BaseAutoBattleAI
     //    //    return;
     //    //}
 
-    //    //ÀüÁø ¸ñÇ¥ ¼³Á¤
+    //    //ì „ì§„ ëª©í‘œ ì„¤ì •
     //    if (_enemyBase != null)
     //    {
     //        advancePoint = _enemyBase.position;
@@ -53,14 +53,14 @@ public class MinionAI : BaseAutoBattleAI
 
     private void UpdateAdvance()
     {
-        //if (!HasAdvancePoint())//³×Æ®¿öÅ© ¿¬°áÀüÀÌ¶ó ÁÖ¼®Ã³¸®
+        //if (!HasAdvancePoint())//ë„¤íŠ¸ì›Œí¬ ì—°ê²°ì „ì´ë¼ ì£¼ì„ì²˜ë¦¬
         //{
         //    return;
         //}
 
         MoveTo(advancePoint);
 
-        //ÀÌµ¿ Áß Àû Å½Áö
+        //ì´ë™ ì¤‘ ì  íƒì§€
         if (FindTarget())
         {
             ChangeState(AutoBattleState.Combat);
@@ -69,18 +69,18 @@ public class MinionAI : BaseAutoBattleAI
 
     private void UpdateSearch()
     {
-        //Å¸°ÙÀÌ À¯È¿ÇÏÁö ¾ÊÀ¸¸é ´Ù½Ã ÀÌµ¿
+        //íƒ€ê²Ÿì´ ìœ íš¨í•˜ì§€ ì•Šìœ¼ë©´ ë‹¤ì‹œ ì´ë™
         if (!IsTargetValid())
         {
             ChangeState(AutoBattleState.Advance);
             return;
         }
 
-        //¾ÆÁ÷Àº °ø°İ·ÎÁ÷ÀÌ ¾øÀ½(°ø°İ·ÎÁ÷ÀÌ »ı±â¸é Ãß°¡ÇÒ À§Ä¡)
+        //ì•„ì§ì€ ê³µê²©ë¡œì§ì´ ì—†ìŒ(ê³µê²©ë¡œì§ì´ ìƒê¸°ë©´ ì¶”ê°€í•  ìœ„ì¹˜)
 
-        //Å¸°ÙÀ¸·Î ÀÌµ¿
+        //íƒ€ê²Ÿìœ¼ë¡œ ì´ë™
         MoveTo(currentTarget.position);
     }
 
-    //ÀüÅõ»óÅÂ·Î µé¾î°¥¼öÀÖ´ÂÁö ÆÇ´ÜÇÏ´Â ¸Ş¼­µå Ãß°¡ ¿¹Á¤
+    //ì „íˆ¬ìƒíƒœë¡œ ë“¤ì–´ê°ˆìˆ˜ìˆëŠ”ì§€ íŒë‹¨í•˜ëŠ” ë©”ì„œë“œ ì¶”ê°€ ì˜ˆì •
 }

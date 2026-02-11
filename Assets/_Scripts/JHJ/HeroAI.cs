@@ -1,16 +1,16 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using Fusion;
 
 
 /// <summary>
-/// ¿µ¿õ ÀÚµ¿ ÀüÅõ AI
+/// ì˜ì›… ìë™ ì „íˆ¬ AI
 /// </summary>
 public class HeroAI : BaseAutoBattleAI
 {
     [Header("Advance")]
-    [SerializeField] private Transform _enemyBase;//ÀüÁø ¸ñÇ¥
+    [SerializeField] private Transform _enemyBase; //ì „ì§„ ëª©í‘œ
 
-    //¿µ¿õ Àü¿ë µ¥ÀÌÅÍ (Stat / Role / Skill µî) Ãß°¡ ¿¹Á¤
+    //ì˜ì›… ì „ìš© ë°ì´í„° (Stat / Role / Skill ë“±) ì¶”ê°€ ì˜ˆì •
 
     protected override void Awake()
     {
@@ -21,7 +21,7 @@ public class HeroAI : BaseAutoBattleAI
         }
     }
 
-    //public override void Spawned()//³×Æ®¿öÅ© ¿¬°áÀüÀÌ¶ó ÁÖ¼®Ã³¸®
+    //public override void Spawned()//ë„¤íŠ¸ì›Œí¬ ì—°ê²°ì „ì´ë¼ ì£¼ì„ì²˜ë¦¬
     //{
     //    base.Spawned();
 
@@ -30,7 +30,7 @@ public class HeroAI : BaseAutoBattleAI
     //    //    return;
     //    //}
 
-    //    //ÀüÁø ¸ñÇ¥ ¼³Á¤
+    //    //ì „ì§„ ëª©í‘œ ì„¤ì •
     //    if (_enemyBase != null)
     //    {
     //        advancePoint = _enemyBase.position;
@@ -53,7 +53,7 @@ public class HeroAI : BaseAutoBattleAI
 
     private void UpdateAdvance()
     {
-        //if (!HasAdvancePoint())//³×Æ®¿öÅ© ¿¬°áÀüÀÌ¶ó ÁÖ¼®Ã³¸®
+        //if (!HasAdvancePoint())//ë„¤íŠ¸ì›Œí¬ ì—°ê²°ì „ì´ë¼ ì£¼ì„ì²˜ë¦¬
         //{
         //    return;
         //}
@@ -74,10 +74,10 @@ public class HeroAI : BaseAutoBattleAI
             return;
         }
 
-        //¿µ¿õ Àü¿ë ÀüÅõ ·ÎÁ÷ (½ºÅ³ / ¿ªÈ° ±â¹İ ºĞ±â) Ãß°¡ ¿¹Á¤
+        //ì˜ì›… ì „ìš© ì „íˆ¬ ë¡œì§ (ìŠ¤í‚¬ / ì—­í™œ ê¸°ë°˜ ë¶„ê¸°) ì¶”ê°€ ì˜ˆì •
 
         MoveTo(currentTarget.position);
     }
 
-    //ÀüÅõ»óÅÂ·Î µé¾î°¥¼öÀÖ´ÂÁö ÆÇ´ÜÇÏ´Â ¸Ş¼­µå Ãß°¡ ¿¹Á¤
+    //ì „íˆ¬ìƒíƒœë¡œ ë“¤ì–´ê°ˆìˆ˜ìˆëŠ”ì§€ íŒë‹¨í•˜ëŠ” ë©”ì„œë“œ ì¶”ê°€ ì˜ˆì •
 }

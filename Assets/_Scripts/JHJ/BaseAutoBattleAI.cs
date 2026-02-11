@@ -1,47 +1,47 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.AI;
 using Fusion;
 
-//ÀÏ´Ü ÀÓÀÇ·Î »óÅÂ ºĞ¸®ÇØµÒ
+//ì¼ë‹¨ ì„ì˜ë¡œ ìƒíƒœ ë¶„ë¦¬í•´ë‘ 
 public enum AutoBattleState { Advance, Combat }
 
 /// <summary>
-/// ÀÚµ¿ ÀüÅõ °øÅë AI·ÎÁ÷ ´ã´ç
-/// »óÅÂ ÀüÈ¯,Å½Áö,ÀÌµ¿, À¯È¿¼º °Ë»ç
-/// »óÅÂº° Çàµ¿Àº ÆÄ»ı Å¬·¡½º¿¡¼­ ±¸Çö
+/// ìë™ ì „íˆ¬ ê³µí†µ AIë¡œì§ ë‹´ë‹¹
+/// ìƒíƒœ ì „í™˜,íƒì§€,ì´ë™, ìœ íš¨ì„± ê²€ì‚¬
+/// ìƒíƒœë³„ í–‰ë™ì€ íŒŒìƒ í´ë˜ìŠ¤ì—ì„œ êµ¬í˜„
 /// </summary>
 public abstract class BaseAutoBattleAI : NetworkBehaviour
 {
-    [Header("³×ºñ")]
+    [Header("ë„¤ë¹„")]
     [SerializeField] protected NavMeshAgent agent;
 
-    [Header("Å½Áö")]
-    [SerializeField] protected float detectRadius = 10f;//Å½Áö ¹üÀ§
-    [SerializeField] protected LayerMask targetLayer;//Å½Áö ´ë»ó
-    [SerializeField] protected float scanInterval = 0.5f;//½ºÄµ°£°İ0.5ÃÊ
+    [Header("íƒì§€")]
+    [SerializeField] protected float detectRadius = 10f;//íƒì§€ ë²”ìœ„
+    [SerializeField] protected LayerMask targetLayer;//íƒì§€ ëŒ€ìƒ
+    [SerializeField] protected float scanInterval = 0.5f;//ìŠ¤ìº”ê°„ê²©0.5ì´ˆ
 
     protected AutoBattleState currentState;
     protected Transform currentTarget;
-    protected Vector3 advancePoint;//¸ñÇ¥ ÁöÁ¡
+    protected Vector3 advancePoint;//ëª©í‘œ ì§€ì 
 
     private float _nextScanTime;
 
     protected virtual void Awake()
     {
-        //±âº» »óÅÂ´Â ÀüÁø
+        //ê¸°ë³¸ ìƒíƒœëŠ” ì „ì§„
         currentState = AutoBattleState.Advance;
         _nextScanTime = Time.time + Random.Range(0f, scanInterval);
     }
 
-    //public override void Spawned()//Spawn ¿Ï·áµÆÀ» ¶§ È£ÃâµÇ´Â Fusion Äİ¹é, ³×Æ®¿öÅ© ¿¬°áÀüÀÌ¶ó ÁÖ¼®Ã³¸®
+    //public override void Spawned()//Spawn ì™„ë£Œëì„ ë•Œ í˜¸ì¶œë˜ëŠ” Fusion ì½œë°±, ë„¤íŠ¸ì›Œí¬ ì—°ê²°ì „ì´ë¼ ì£¼ì„ì²˜ë¦¬
     //{
-    //    //AI ÆÇ´ÜÀº State Authority¸¦ °¡Áø Å¬¶óÀÌ¾ğÆ®¸¸ ¼öÇà(PUNÀÇ ¸¶½ºÅÍÅ¬¶óÀÌ¾ğÆ®¿Í À¯»ç)
+    //    //AI íŒë‹¨ì€ State Authorityë¥¼ ê°€ì§„ í´ë¼ì´ì–¸íŠ¸ë§Œ ìˆ˜í–‰(PUNì˜ ë§ˆìŠ¤í„°í´ë¼ì´ì–¸íŠ¸ì™€ ìœ ì‚¬)
     //    if (!Object.HasStateAuthority)
     //    {
     //        return;
     //    }
 
-    //    //Ã¹ ½ºÄµ ½ÃÁ¡À» µ¿ÀÏÇÏÁö ¾Ê°Ô(¼ø°£ÀûÀÎ ÇÁ·¹ÀÓµå¶ø ¹æÁö)
+    //    //ì²« ìŠ¤ìº” ì‹œì ì„ ë™ì¼í•˜ì§€ ì•Šê²Œ(ìˆœê°„ì ì¸ í”„ë ˆì„ë“œë ë°©ì§€)
     //    float now = (float)Runner.SimulationTime;
     //    _nextScanTime = now + Random.Range(0f, scanInterval);
     //}
@@ -56,7 +56,7 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
     //    UpdateState();
     //}
 
-    private void Update()//³×Æ®¿öÅ© Àû¿ëÀü ¾÷µ¥ÀÌÆ®·Î Å×½ºÆ®
+    private void Update()//ë„¤íŠ¸ì›Œí¬ ì ìš©ì „ ì—…ë°ì´íŠ¸ë¡œ í…ŒìŠ¤íŠ¸
     {
         if (Runner == null)
         {
@@ -64,9 +64,9 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
         }
     }
 
-    protected abstract void UpdateState();//»óÅÂ ¾÷µ¥ÀÌÆ®(ÆÄ»ıÅ¬·¡½º¿¡¼­ ±¸Çö)
+    protected abstract void UpdateState();//ìƒíƒœ ì—…ë°ì´íŠ¸(íŒŒìƒí´ë˜ìŠ¤ì—ì„œ êµ¬í˜„)
 
-    protected void ChangeState(AutoBattleState nextState)//»óÅÂ ÀüÈ¯ ¸Ş¼­µå
+    protected void ChangeState(AutoBattleState nextState)//ìƒíƒœ ì „í™˜ ë©”ì„œë“œ
     {
         if (currentState == nextState)
         {
@@ -77,9 +77,9 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
         currentState = nextState;
     }
 
-    protected bool FindTarget()//°¡±î¿î Àû °Å¸® ±âÁØ Ã£±â
+    protected bool FindTarget()//ê°€ê¹Œìš´ ì  ê±°ë¦¬ ê¸°ì¤€ ì°¾ê¸°
     {
-        //float now = (float)Runner.SimulationTime; //³×Æ®¿öÅ© ¿¬°áÀüÀÌ¶ó ÁÖ¼®Ã³¸®
+        //float now = (float)Runner.SimulationTime; //ë„¤íŠ¸ì›Œí¬ ì—°ê²°ì „ì´ë¼ ì£¼ì„ì²˜ë¦¬
         //if (now < _nextScanTime)
         //{
         //    return currentTarget != null;
@@ -120,7 +120,7 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
         return currentTarget != null;
     }
 
-    protected bool IsTargetValid()//Å¸°Ù È®ÀÎ¿ë ¸Ş¼­µå
+    protected bool IsTargetValid()//íƒ€ê²Ÿ í™•ì¸ìš© ë©”ì„œë“œ
     {
         if (currentTarget == null)
         {
@@ -130,14 +130,14 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
         return currentTarget.gameObject.activeInHierarchy;
     }
 
-    protected bool HasAdvancePoint()//¸ñÇ¥ È®ÀÎ¿ë ¸Ş¼­µå
+    protected bool HasAdvancePoint()//ëª©í‘œ í™•ì¸ìš© ë©”ì„œë“œ
     {
         return advancePoint != Vector3.zero;
     }
 
     protected virtual void MoveTo(Vector3 destination)
     {
-        //ÇöÀç´Â ³×ºñ¸Ş½¬ ±â¹İ, ÃßÈÄ º¯°æµÉ¼öµµ ÀÖÀ½
+        //í˜„ì¬ëŠ” ë„¤ë¹„ë©”ì‰¬ ê¸°ë°˜, ì¶”í›„ ë³€ê²½ë ìˆ˜ë„ ìˆìŒ
         if (agent == null || !agent.enabled)
         {
             return;
@@ -159,7 +159,7 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
     }
 
 #if UNITY_EDITOR
-    protected virtual void OnDrawGizmosSelected()//Å½Áö ¹üÀ§ ½Ã°¢È­
+    protected virtual void OnDrawGizmosSelected()//íƒì§€ ë²”ìœ„ ì‹œê°í™”
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectRadius);
