@@ -3,7 +3,7 @@ using UnityEngine.AI;
 using Fusion;
 
 //일단 임의로 상태 분리해둠
-public enum AutoBattleState { Advance, Search, Return }
+public enum AutoBattleState { Advance, Combat }
 
 /// <summary>
 /// 자동 전투 공통 AI로직 담당
@@ -32,7 +32,7 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
         currentState = AutoBattleState.Advance;
     }
 
-    public override void Spawned()
+    public override void Spawned()//Spawn 완료됐을 때 호출되는 Fusion 콜백
     {
         //AI 판단은 State Authority를 가진 클라이언트만 수행(PUN의 마스터클라이언트와 유사)
         if (!Object.HasStateAuthority)
