@@ -15,14 +15,11 @@ public class LoginView : MonoBehaviour
     [SerializeField] private Button _signUpButton;
 
     [Header("Feedback")]
-    [SerializeField] private TextMeshProUGUI _welcomeText;
-    [SerializeField] private GameObject _errorPanel;
-    [SerializeField] private TextMeshProUGUI _errorText;
+    [SerializeField] private TextMeshProUGUI _resultText;
 
     void Start()
     {
-        _welcomeText.gameObject.SetActive(false);
-        _errorPanel.SetActive(false);
+        _resultText.gameObject.SetActive(false);
     }
 
     public (string email, string password) GetCredentials()
@@ -40,14 +37,14 @@ public class LoginView : MonoBehaviour
 
     public void ShowWelcomeMessage(string nickname)
     {
-        _welcomeText.text = $"{nickname}님, 환영합니다.";
-        _welcomeText.gameObject.SetActive(true);
+        _resultText.text = $"{nickname}님, 환영합니다.";
+        _resultText.gameObject.SetActive(true);
     }
 
     public void ShowError(string message)
     {
-        _errorText.text = message;
-        _errorPanel.SetActive(true);
+        _resultText.text = message;
+        _resultText.gameObject.SetActive(true);
     }
 
     public void ShowNicknameCreationRequired(string email)
