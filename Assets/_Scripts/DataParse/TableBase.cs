@@ -1,25 +1,25 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
-//T´Â Å¬·¡½º, ID°¡ ÇÊ¿ä, »ı¼º °¡´É(ÀÎÀÚ°ª ¾øÀÌ)
+//TëŠ” í´ë˜ìŠ¤, IDê°€ í•„ìš”, ìƒì„± ê°€ëŠ¥(ì¸ìê°’ ì—†ì´)
 public class TableBase<T> where T : class, ITableData, new()
 {
-    //µ¥ÀÌÅÍ ÀúÀå µñ¼Å³Ê¸® (Key: id½ºÆ®¸µ, Val: µ¥ÀÌÅÍ °´Ã¼)
+    //ë°ì´í„° ì €ì¥ ë”•ì…”ë„ˆë¦¬ (Key: idìŠ¤íŠ¸ë§, Val: ë°ì´í„° ê°ì²´)
     public Dictionary<string, T> dataMap = new Dictionary<string, T>();
 
-    //ÀÎÀÚ°ªÀ¸·Î ÆÄÀÏ °æ·Î¸¦ ¹Ş¾Æ¼­ µ¥ÀÌÅÍ¸¦ Ã¤¿ö³Ö´Â ¸Ş¼­µå
+    //ì¸ìê°’ìœ¼ë¡œ íŒŒì¼ ê²½ë¡œë¥¼ ë°›ì•„ì„œ ë°ì´í„°ë¥¼ ì±„ì›Œë„£ëŠ” ë©”ì„œë“œ
     public void Load(string filePath)
     {
-        //CsvParser¿¡°Ô ½ÃÄÑ¼­ ¸®½ºÆ®·Î µ¥ÀÌÅÍ ¹Ş¾Æ¿À±â
+        //CsvParserì—ê²Œ ì‹œì¼œì„œ ë¦¬ìŠ¤íŠ¸ë¡œ ë°ì´í„° ë°›ì•„ì˜¤ê¸°
         List<T> list = CsvParser.Parse<T>(filePath);
 
-        //µñ¼Å³Ê¸® ÃÊ±âÈ­ (Àç·Îµå ´ëºñ)
+        //ë”•ì…”ë„ˆë¦¬ ì´ˆê¸°í™” (ì¬ë¡œë“œ ëŒ€ë¹„)
         dataMap.Clear();
 
-        //¸®½ºÆ®¸¦ µñ¼Å³Ê¸®·Î º¯È¯
+        //ë¦¬ìŠ¤íŠ¸ë¥¼ ë”•ì…”ë„ˆë¦¬ë¡œ ë³€í™˜
         foreach (T item in list)
         {
-            //id°¡ ºñ¾îÀÖÁö ¾Ê°í Áßº¹µÈ id°¡ ¾Æ´Ò ¶§¸¸ µî·Ï
+            //idê°€ ë¹„ì–´ìˆì§€ ì•Šê³  ì¤‘ë³µëœ idê°€ ì•„ë‹ ë•Œë§Œ ë“±ë¡
             if (!string.IsNullOrEmpty(item.PrimaryID) && !dataMap.ContainsKey(item.PrimaryID))
             {
                 dataMap.Add(item.PrimaryID, item);
@@ -27,22 +27,22 @@ public class TableBase<T> where T : class, ITableData, new()
         }
     }
 
-    //ID·Î µ¥ÀÌÅÍ ²¨³»´Â ÇÔ¼ö
+    //IDë¡œ ë°ì´í„° êº¼ë‚´ëŠ” í•¨ìˆ˜
     public T Get(string id)
     {
         if (string.IsNullOrEmpty(id))
         {
             return null;
         }
-        //µñ¼Å³Ê¸® È®ÀÎ
+        //ë”•ì…”ë„ˆë¦¬ í™•ì¸
         if (dataMap.TryGetValue(id, out T value))
         {
             return value;
         }
-        return null; // ¸ø Ã£À¸¸é null ¹İÈ¯
+        return null; // ëª» ì°¾ìœ¼ë©´ null ë°˜í™˜
     }
 
-    //µµ°¨ °°Àº °÷¿¡¼­ ÀüÃ¼ ¸ñ·ÏÀ» ¹İÈ¯ÇÏ´Â ¸Ş¼­µå
+    //ë„ê° ê°™ì€ ê³³ì—ì„œ ì „ì²´ ëª©ë¡ì„ ë°˜í™˜í•˜ëŠ” ë©”ì„œë“œ
     public List<T> GetAll()
     {
         return new List<T>(dataMap.Values);
