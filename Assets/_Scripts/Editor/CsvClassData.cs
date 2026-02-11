@@ -1,7 +1,7 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 
 /// <summary>
-/// CSV ÆÄÀÏÀÇ ÄÃ·³ Á¤ÀÇ(ÀÌ¸§°ú Å¸ÀÔ)¸¦ ÀúÀåÇÏ´Â µ¥ÀÌÅÍ ±¸Á¶Ã¼
+/// CSV íŒŒì¼ì˜ ì»¬ëŸ¼ ì •ì˜(ì´ë¦„ê³¼ íƒ€ì…)ë¥¼ ì €ì¥í•˜ëŠ” ë°ì´í„° êµ¬ì¡°ì²´
 /// </summary>
 public struct ColumnDefinition
 {
@@ -10,7 +10,7 @@ public struct ColumnDefinition
 }
 
 /// <summary>
-/// CSV ÆÄÀÏÀÇ Çì´õ Á¤º¸¸¦ ÀúÀåÇÏ´Â ÄÁÅ×ÀÌ³Ê
+/// CSV íŒŒì¼ì˜ í—¤ë” ì •ë³´ë¥¼ ì €ì¥í•˜ëŠ” ì»¨í…Œì´ë„ˆ
 /// </summary>
 public class CsvClassData
 {
