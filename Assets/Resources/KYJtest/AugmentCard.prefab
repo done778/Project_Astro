@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6152870978064867452}
   - component: {fileID: 4790883766253916843}
   m_Layer: 5
-  m_Name: Button (Legacy)
+  m_Name: AugmentCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
