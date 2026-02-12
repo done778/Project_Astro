@@ -2,14 +2,13 @@
 
 public class MinionController : UnitController
 {
-    public override void Attack()
+    public override void Attack(Transform target)
     {
         
     }
 
-    public override void MoveTo(Vector3 position)
-    {
+    //public override bool CanAttack(Transform target)
+    //{
         
-    }
-
+    //}
 }

@@ -8,17 +8,9 @@ public class MinionAI : BaseAutoBattleAI
 {
     [Header("Advance")]
     [SerializeField] private Transform _enemyBase; //전진 목표
-    [SerializeField] private Team team;
+    
     //미니언 전용 데이터 추가 예정
 
-    protected override void Awake()
-    {
-        base.Awake();
-        if (_enemyBase != null)
-        {
-            finalGoal = _enemyBase.position;
-        }
-    }
 
     //public override void Spawned() //네트워크 연결전이라 주석처리
     //{
@@ -45,7 +37,7 @@ public class MinionAI : BaseAutoBattleAI
                 break;
 
             case AutoBattleState.Combat:
-                UpdateSearch();
+                UpdateCombat();
                 break;
 
         }
@@ -67,7 +59,7 @@ public class MinionAI : BaseAutoBattleAI
         }
     }
 
-    private void UpdateSearch()
+    private void UpdateCombat()
     {
         //타겟이 유효하지 않으면 다시 이동
         if (!IsTargetValid())
@@ -80,34 +72,40 @@ public class MinionAI : BaseAutoBattleAI
 
         //타겟으로 이동
         MoveTo(currentTarget.position);
+
+        //if (controller.CanAttack(currentTarget))
+        //{
+        //    StopMove();
+        //    controller.Attack(currentTarget);
+        //}
     }
 
-    //팀과 공격타겟 설정등 셋업
-    public void Setup(Team team, Transform targetBase)
-    {
-        this.team = team;
-        this._enemyBase = targetBase;
+    //팀과 공격타겟 설정등 셋업 (추상클래스로 이관)
+    //public void Setup(Team team, Transform targetBase)
+    //{
+    //    this.team = team;
+    //    this._enemyBase = targetBase;
 
-        // 진형에 따른 레이어 설정 (예: Blue 미니언은 Red 레이어를 공격)
-        if (team == Team.Blue)
-        {
-            gameObject.layer = LayerMask.NameToLayer("BlueTeam");
-            targetLayer = 1 << LayerMask.NameToLayer("RedTeam");
-        }
-        else
-        {
-            gameObject.layer = LayerMask.NameToLayer("RedTeam");
-            targetLayer = 1 << LayerMask.NameToLayer("BlueTeam");
-        }
+    //    // 진형에 따른 레이어 설정 (예: Blue 미니언은 Red 레이어를 공격)
+    //    if (team == Team.Blue)
+    //    {
+    //        gameObject.layer = LayerMask.NameToLayer("BlueTeam");
+    //        targetLayer = 1 << LayerMask.NameToLayer("RedTeam");
+    //    }
+    //    else
+    //    {
+    //        gameObject.layer = LayerMask.NameToLayer("RedTeam");
+    //        targetLayer = 1 << LayerMask.NameToLayer("BlueTeam");
+    //    }
 
-        if (_enemyBase != null)
-        {
-            finalGoal = _enemyBase.position;
-        }
+    //    if (_enemyBase != null)
+    //    {
+    //        finalGoal = _enemyBase.position;
+    //    }
 
-        // 상태 초기화
-        ChangeState(AutoBattleState.Advance);
-    }
+    //    // 상태 초기화
+    //    ChangeState(AutoBattleState.Advance);
+    //}
 
     //전투상태로 들어갈수있는지 판단하는 메서드 추가 예정
 }

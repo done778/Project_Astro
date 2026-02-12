@@ -11,7 +11,6 @@ public enum AutoBattleState { Advance, Combat }
 /// 상태 전환,탐지,이동, 유효성 검사
 /// 상태별 행동은 파생 클래스에서 구현
 /// </summary>
-[RequireComponent(typeof(NavMeshAgent))]
 public abstract class BaseAutoBattleAI : NetworkBehaviour
 {
     [Header("네비")]
@@ -21,6 +20,9 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
     [SerializeField] protected float detectRadius = 10f;//탐지 범위
     [SerializeField] protected LayerMask targetLayer;//탐지 대상
     [SerializeField] protected float scanInterval = 0.5f;//스캔간격0.5초
+
+    [Header("팀")]
+    [SerializeField] protected Team team;
 
     protected AutoBattleState currentState;
     protected Transform currentTarget;
@@ -155,6 +157,30 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
 
         agent.isStopped = true;
         agent.ResetPath();
+    }
+
+    //팀과 공격타겟 설정등 셋업
+    public virtual void Setup(Team team, Transform targetBase)
+    {
+        this.team = team;
+
+        if (team == Team.Blue)
+        {
+            gameObject.layer = LayerMask.NameToLayer("BlueTeam");
+            targetLayer = 1 << LayerMask.NameToLayer("RedTeam");
+        }
+        else
+        {
+            gameObject.layer = LayerMask.NameToLayer("RedTeam");
+            targetLayer = 1 << LayerMask.NameToLayer("BlueTeam");
+        }
+
+        if (targetBase != null)
+        {
+            finalGoal = targetBase.position;
+        }
+
+        ChangeState(AutoBattleState.Advance);
     }
 
 #if UNITY_EDITOR

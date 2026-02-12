@@ -13,15 +13,6 @@ public class HeroAI : BaseAutoBattleAI
 
     //영웅 전용 데이터 (Stat / Role / Skill 등) 추가 예정
 
-    protected override void Awake()
-    {
-        base.Awake();
-
-        if (_enemyBase != null)
-        {
-            finalGoal = _enemyBase.position;
-        }
-    }
 
     //public override void Spawned()//네트워크 연결전이라 주석처리
     //{
@@ -79,6 +70,12 @@ public class HeroAI : BaseAutoBattleAI
         //영웅 전용 전투 로직 (스킬 / 역활 기반 분기) 추가 예정
 
         MoveTo(currentTarget.position);
+
+        //if (controller.CanAttack(currentTarget))
+        //{
+        //    StopMove();
+        //    controller.Attack(currentTarget);
+        //}
     }
 
     //전투상태로 들어갈수있는지 판단하는 메서드 추가 예정
