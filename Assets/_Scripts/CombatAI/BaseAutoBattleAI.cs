@@ -1,6 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.AI;
+﻿using System.Collections.Generic;
 using Fusion;
+using UnityEngine;
+using UnityEngine.AI;
 
 //일단 임의로 상태 분리해둠
 public enum AutoBattleState { Advance, Combat }
@@ -10,6 +11,7 @@ public enum AutoBattleState { Advance, Combat }
 /// 상태 전환,탐지,이동, 유효성 검사
 /// 상태별 행동은 파생 클래스에서 구현
 /// </summary>
+[RequireComponent(typeof(NavMeshAgent))]
 public abstract class BaseAutoBattleAI : NetworkBehaviour
 {
     [Header("네비")]
@@ -22,12 +24,14 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
 
     protected AutoBattleState currentState;
     protected Transform currentTarget;
-    protected Vector3 advancePoint;//목표 지점
+    protected UnitController controller;
+    protected Vector3 finalGoal;//최종 목표
 
     private float _nextScanTime;
 
     protected virtual void Awake()
     {
+        controller = GetComponent<UnitController>();
         //기본 상태는 전진
         currentState = AutoBattleState.Advance;
         _nextScanTime = Time.time + Random.Range(0f, scanInterval);
@@ -128,11 +132,6 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
         }
 
         return currentTarget.gameObject.activeInHierarchy;
-    }
-
-    protected bool HasAdvancePoint()//목표 확인용 메서드
-    {
-        return advancePoint != Vector3.zero;
     }
 
     protected virtual void MoveTo(Vector3 destination)

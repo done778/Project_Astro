@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Fusion;
+using System.Collections.Generic;
 
 
 /// <summary>
@@ -7,17 +8,18 @@ using Fusion;
 /// </summary>
 public class HeroAI : BaseAutoBattleAI
 {
-    [Header("Advance")]
-    [SerializeField] private Transform _enemyBase; //전진 목표
+    [Header("목표")]
+    [SerializeField] private Transform _enemyBase;//최종 목표
 
     //영웅 전용 데이터 (Stat / Role / Skill 등) 추가 예정
 
     protected override void Awake()
     {
         base.Awake();
+
         if (_enemyBase != null)
         {
-            advancePoint = _enemyBase.position;
+            finalGoal = _enemyBase.position;
         }
     }
 
@@ -58,7 +60,7 @@ public class HeroAI : BaseAutoBattleAI
         //    return;
         //}
 
-        MoveTo(advancePoint);
+        MoveTo(finalGoal);
 
         if (FindTarget())
         {
@@ -80,4 +82,5 @@ public class HeroAI : BaseAutoBattleAI
     }
 
     //전투상태로 들어갈수있는지 판단하는 메서드 추가 예정
+
 }
