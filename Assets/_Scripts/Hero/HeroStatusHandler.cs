@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 /*
     DB에서 Key / Value로 이루어진 Dictional를 통하여
@@ -8,28 +9,47 @@
 
 public class HeroStatusHandler : MonoBehaviour
 {
-    [SerializeField] private HeroData _baseHeroData; //원본DB
+    [SerializeField] private HeroData _baseHeroData; //원본DB <- CSV 파서 들여오면 그걸로 수정. (tableName = table_herostat)
 
-    //영웅 최신 데이터정보(레벨값 반영)
+    private int _level;
+    private int _exp;
+    private bool _isUnlock;
+
+    // 영웅 최신 데이터정보(레벨값 반영)
     private HeroStatus _currentHeroData;
-    private int _currentLevel;
 
-    //프로퍼티
+    // 프로퍼티
     public HeroStatus CurrentHeroData => _currentHeroData;
-    public int CurrentLevel => _currentLevel;
 
-    private void Start()
+    // 이벤트
+    public event Action<string, int, int, bool> OnHeroDataChanged;
+
+    public int Level
     {
-        Initialize(1);
+        get => _level;
+        set { _level = value; NotifyDataChanged(); }
     }
 
-    public void Initialize(int level)
+    public int Exp
     {
-        _currentLevel = level;
+        get => _exp;
+        set { _exp = value; NotifyDataChanged(); }
+    }
+
+    private void NotifyDataChanged()
+    {
+        OnHeroDataChanged?.Invoke(_baseHeroData.Hero_ID, _level, _exp, _isUnlock);
+    }
+
+    public void Initialize(int level, int exp, bool isUnlock)
+    {
+        _level = level;
+        _exp = exp;
+        _isUnlock = isUnlock;
         RefreshData();
     }
 
-    //레벨에 따른 Status변화 
+    // 레벨에 따른 Status변화 
     private void RefreshData()
     {
         if (_currentHeroData != null)
@@ -38,7 +58,7 @@ public class HeroStatusHandler : MonoBehaviour
 
             _currentHeroData = new HeroStatus(_baseHeroData.HeroStatus);
 
-            ApplyLevelStatus(_currentHeroData, _currentLevel);
+            ApplyLevelStatus(_currentHeroData, _level);
         }
     }
 

@@ -1,9 +1,5 @@
 ﻿using UnityEngine;
 
-public enum HeroType { Robot, SpaceCraft }
-public enum HeroRole { Tank, Melee, Ranged, Summoner, Healer }
-public enum ArmorType { Light_Armor, Medium_Armor, Heavy_Armor }
-
 [CreateAssetMenu(fileName = "HeroData", menuName = "ScriptableObject/HeroData")]
 public class HeroData : ScriptableObject
 {
