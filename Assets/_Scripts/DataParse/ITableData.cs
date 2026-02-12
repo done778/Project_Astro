@@ -1,5 +1,5 @@
-//¸ğµç µ¥ÀÌÅÍ Å¬·¡½º´Â ID¸¦ ¹İÃâÇÏµµ·Ï
+ï»¿//ëª¨ë“  ë°ì´í„° í´ë˜ìŠ¤ëŠ” IDë¥¼ ë°˜ì¶œí•˜ë„ë¡
 public interface ITableData
 {
-    string PrimaryID { get; } //ÀĞ±â Àü¿ë
+    string PrimaryID { get; } //ì½ê¸° ì „ìš©
 }
