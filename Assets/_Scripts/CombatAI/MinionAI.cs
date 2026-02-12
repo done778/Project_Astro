@@ -82,7 +82,7 @@ public class MinionAI : BaseAutoBattleAI
         MoveTo(currentTarget.position);
     }
 
-    //전투상태로 들어갈수있는지 판단하는 메서드 추가 예정
+    //팀과 공격타겟 설정등 셋업
     public void Setup(Team team, Transform targetBase)
     {
         this.team = team;
@@ -108,4 +108,6 @@ public class MinionAI : BaseAutoBattleAI
         // 상태 초기화
         ChangeState(AutoBattleState.Advance);
     }
+
+    //전투상태로 들어갈수있는지 판단하는 메서드 추가 예정
 }

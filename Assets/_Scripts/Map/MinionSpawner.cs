@@ -7,7 +7,7 @@ public class MinionSpawner : MonoBehaviour
     [Header("기본 설정")]
     [SerializeField] private Team _team;
     [SerializeField] private string _minionTag = "Minion";
-    [SerializeField] private Transform _spawnPoint;
+    [SerializeField] private Transform[] _spawnPoints;
     [SerializeField] private Transform _enemyBase;
 
     [Header("스폰 설정")]
@@ -49,18 +49,27 @@ public class MinionSpawner : MonoBehaviour
 
     private void SpawnMinions()
     {
+        if (_spawnPoints == null || _spawnPoints.Length == 0) return;
+
         int totalToSpawn = _baseSpawnCount + (_destroyedTowerCount * _bonusSpawnCount);
 
-        for(int i = 0; i<totalToSpawn; i++)
+        foreach (var targetPoint in _spawnPoints)
         {
-            Vector3 randomOffset = new Vector3(Random.Range(-0.05f, 0.05f), 0, Random.Range(-0.05f, 0.05f));
-            GameObject minionObj = PoolManager.Instance.SpawnFromPool(_minionTag, _spawnPoint.position + randomOffset, Quaternion.identity);
-
-            if(minionObj.TryGetComponent(out MinionAI ai))
+            for (int i = 0; i < totalToSpawn; i++)
             {
-                ai.Setup(_team, _enemyBase);
+                Vector3 randomOffset = new Vector3(Random.Range(-0.05f, 0.05f), 0, Random.Range(-0.05f, 0.05f));
+
+                GameObject minionObj = PoolManager.Instance.SpawnFromPool(
+                    _minionTag,
+                    targetPoint.position + randomOffset,
+                    Quaternion.identity
+                    );
+
+                if (minionObj.TryGetComponent(out MinionAI ai))
+                {
+                    ai.Setup(_team, _enemyBase);
+                }
             }
-    
         }
     }
 }

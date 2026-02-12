@@ -744,7 +744,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MinionSpawner
   _team: 0
   _minionTag: Minion
-  _spawnPoint: {fileID: 286569281}
+  _spawnPoints:
+  - {fileID: 286569281}
+  - {fileID: 2099991292}
   _enemyBase: {fileID: 544860707}
   _baseSpawnCount: 3
   _bonusSpawnCount: 3
@@ -752,6 +754,62 @@ MonoBehaviour:
   _towers:
   - {fileID: 1910674111}
   - {fileID: 1992498372}
+--- !u!1 &146631955
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 146631956}
+  - component: {fileID: 146631957}
+  m_Layer: 0
+  m_Name: MinionSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &146631956
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146631955}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.79, y: 0, z: -11.38}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 254773289}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &146631957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146631955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dde036937718dc4d93184ed86bca9a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinionSpawner
+  _team: 1
+  _minionTag: Minion
+  _spawnPoints:
+  - {fileID: 1910674107}
+  - {fileID: 1992498368}
+  _enemyBase: {fileID: 1431818093}
+  _baseSpawnCount: 3
+  _bonusSpawnCount: 3
+  _spawnInterval: 15
+  _towers:
+  - {fileID: 286569285}
+  - {fileID: 2099991296}
 --- !u!1 &155707805
 GameObject:
   m_ObjectHideFlags: 0
@@ -1055,6 +1113,7 @@ Transform:
   - {fileID: 544860707}
   - {fileID: 1910674107}
   - {fileID: 1992498368}
+  - {fileID: 146631956}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &265504855
@@ -4106,10 +4165,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 143026192}
   - {fileID: 1431818093}
   - {fileID: 286569281}
   - {fileID: 2099991292}
+  - {fileID: 143026192}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1497990086
@@ -5321,7 +5380,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 104}
+  m_AnchoredPosition: {x: 0, y: -56}
   m_SizeDelta: {x: 406.265, y: 164.5337}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1812836501
@@ -5727,7 +5786,7 @@ GameObject:
   - component: {fileID: 1992498369}
   - component: {fileID: 1992498372}
   m_Layer: 0
-  m_Name: sub_right
+  m_Name: sub_left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
