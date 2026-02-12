@@ -8,26 +8,45 @@
 
 public class HeroStatusHandler : MonoBehaviour
 {
-    [SerializeField] private HeroData _heroDatas;
+    [SerializeField] private HeroData _baseHeroData; //원본DB
 
     //영웅 최신 데이터정보(레벨값 반영)
-    private HeroStatus _refreshHeroData;
+    private HeroStatus _currentHeroData;
+    private int _currentLevel;
 
     //프로퍼티
-    public HeroStatus RefreshHeroData => _refreshHeroData;
+    public HeroStatus CurrentHeroData => _currentHeroData;
+    public int CurrentLevel => _currentLevel;
 
     private void Start()
     {
-        _refreshHeroData = _heroDatas.HeroStatus;
+        Initialize(1);
+    }
+
+    public void Initialize(int level)
+    {
+        _currentLevel = level;
+        RefreshData();
     }
 
     //레벨에 따른 Status변화 
     private void RefreshData()
     {
-        if (_refreshHeroData != null)
+        if (_currentHeroData != null)
         {
-            
+            if (_baseHeroData == null || _baseHeroData.HeroStatus == null) return;
 
+            _currentHeroData = new HeroStatus(_baseHeroData.HeroStatus);
+
+            ApplyLevelStatus(_currentHeroData, _currentLevel);
         }
+    }
+
+    private void ApplyLevelStatus(HeroStatus status, int level)
+    {
+        //레벨업 시 상승되는 스테이터스 상승치 로직 구현하기
+        //하기에 예시 살짞
+        float growthRate = 0.1f * level;
+        status.Hp += status.Hp * growthRate;
     }
 }
