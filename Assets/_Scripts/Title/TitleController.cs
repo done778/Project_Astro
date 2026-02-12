@@ -1,10 +1,9 @@
 ﻿using Firebase;
 using Firebase.Extensions;
-using Fusion;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TitleController : SimulationBehaviour
+public class TitleController : MonoBehaviour
 {
     [Header("Services")]
     [SerializeField] private AuthService _authService;
@@ -40,7 +39,7 @@ public class TitleController : SimulationBehaviour
 
     private void OnLoginComplete(string nickname)
     {
-        Debug.Log("모든 로그인 로직 완료");
-        // 로그인 완료 후 해야할 일 작성
+        Debug.Log("[TitleController] 모든 로그인 로직 완료");
+        SceneManager.LoadScene("Lobby");
     }
 }
