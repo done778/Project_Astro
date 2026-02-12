@@ -16,7 +16,7 @@ public class MinionAI : BaseAutoBattleAI
         base.Awake();
         if (_enemyBase != null)
         {
-            advancePoint = _enemyBase.position;
+            finalGoal = _enemyBase.position;
         }
     }
 
@@ -58,7 +58,7 @@ public class MinionAI : BaseAutoBattleAI
         //    return;
         //}
 
-        MoveTo(advancePoint);
+        MoveTo(finalGoal);
 
         //이동 중 적 탐지
         if (FindTarget())
@@ -102,7 +102,7 @@ public class MinionAI : BaseAutoBattleAI
 
         if (_enemyBase != null)
         {
-            advancePoint = _enemyBase.position;
+            finalGoal = _enemyBase.position;
         }
 
         // 상태 초기화
