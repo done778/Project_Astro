@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections.Generic;
 
 public class PoolManager : Singleton<PoolManager>
@@ -6,9 +6,9 @@ public class PoolManager : Singleton<PoolManager>
     [System.Serializable]
     public struct Pool
     {
-        public string tag;  // ½Äº°¿ë ÅÂ±× (ÇÁ¸®ÆÕÀÌ¸§ µîµî)
+        public string tag;  // ì‹ë³„ìš© íƒœê·¸ (í”„ë¦¬íŒ¹ì´ë¦„ ë“±ë“±)
         public GameObject prefab;
-        public int size;   // ÃÊ±â »ı¼º °¹¼ö
+        public int size;   // ì´ˆê¸° ìƒì„± ê°¯ìˆ˜
     }
 
     [SerializeField] private List<Pool> pools;
@@ -32,7 +32,7 @@ public class PoolManager : Singleton<PoolManager>
         }
     }
 
-    //»õ·Î¿î ¿ÀºêÁ§Æ® ÀÎ½ºÅÏ½ºÈ­¿ë
+    //ìƒˆë¡œìš´ ì˜¤ë¸Œì íŠ¸ ì¸ìŠ¤í„´ìŠ¤í™”ìš©
     private GameObject CreateNewObject(string tag, GameObject prefab)
     {
         GameObject obj = Instantiate(prefab, transform);
@@ -41,19 +41,19 @@ public class PoolManager : Singleton<PoolManager>
         return obj;
     }
 
-    //Ç®¿¡¼­ ²¨³»¼­ È°¼ºÈ­½ÃÅ°±â
+    //í’€ì—ì„œ êº¼ë‚´ì„œ í™œì„±í™”ì‹œí‚¤ê¸°
     public GameObject SpawnFromPool(string tag, Vector3 positon, Quaternion rotation)
     {
         if (!_poolDict.ContainsKey(tag)) return null;
 
         GameObject objectToSpawn;
 
-        if (_poolDict[tag].Count == 0) //Æú Å©±â ÀÚµ¿È®Àå
+        if (_poolDict[tag].Count == 0) //í´ í¬ê¸° ìë™í™•ì¥
         {
             Pool pool = pools.Find(p => p.tag == tag);
             objectToSpawn = CreateNewObject(tag, pool.prefab);
         }
-        else // ÀÖÀ¸¸é Àç»ç¿ë
+        else // ìˆìœ¼ë©´ ì¬ì‚¬ìš©
         {
             objectToSpawn = _poolDict[tag].Dequeue();
         }
@@ -64,10 +64,10 @@ public class PoolManager : Singleton<PoolManager>
         return objectToSpawn;
     }
 
-    // Ç®·Î ¹İÈ¯ ½ÃÅ°±â
+    // í’€ë¡œ ë°˜í™˜ ì‹œí‚¤ê¸°
     public void ReturnToPool(string tag,GameObject obj)
     {
-        if (!_poolDict.ContainsKey(tag)) //Àß¸øµÈ Ç®·Î ¹İÈ¯ ½Ãµµ½Ã ±×³É ÆÄ±«
+        if (!_poolDict.ContainsKey(tag)) //ì˜ëª»ëœ í’€ë¡œ ë°˜í™˜ ì‹œë„ì‹œ ê·¸ëƒ¥ íŒŒê´´
         {
             Destroy(obj);
             return;
