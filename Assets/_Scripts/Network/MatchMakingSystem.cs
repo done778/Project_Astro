@@ -13,9 +13,12 @@ public class MatchMakingSystem : MonoBehaviour
     private NetworkRunner _networkRunner;
     private bool _isMatching = false;
 
+    private int _height;
+
     private void Awake()
     {
         _cancelBtn.interactable = false;
+        _height = Screen.height;
     }
 
     public async void OnClickMatchMaking()
@@ -26,7 +29,7 @@ public class MatchMakingSystem : MonoBehaviour
 
         GameObject obj = Instantiate(_runnerPrefab);
         _networkRunner = obj.GetComponent<NetworkRunner>();
-        obj.GetComponent<MatchMakingRunner>().SetCancelButton(_cancelBtn);
+        obj.GetComponent<MatchMakingRunner>().Initialize(_cancelBtn, _networkRunner);
 
         _matchMakingPanel.transform.DOMoveY(0, 0.8f).SetEase(Ease.OutCubic);
         await OnConnected();
@@ -39,7 +42,7 @@ public class MatchMakingSystem : MonoBehaviour
 
         await _networkRunner.Shutdown();
 
-        _matchMakingPanel.transform.DOMoveY(2340, 0.8f).SetEase(Ease.OutCubic);
+        _matchMakingPanel.transform.DOMoveY(_height + 1, 0.8f).SetEase(Ease.OutCubic);
     }
 
     public async Task OnConnected()
