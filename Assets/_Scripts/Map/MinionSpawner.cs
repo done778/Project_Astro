@@ -42,6 +42,7 @@ public class MinionSpawner : MonoBehaviour
     {
         while (true)
         {
+            yield return new WaitUntil(() => GameManager.Instance.IsGameStarted); //게임 시작전 대기
             yield return new WaitForSeconds(_spawnInterval);
             SpawnMinions();
         }
