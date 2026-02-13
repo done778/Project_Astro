@@ -46,6 +46,7 @@ public class CardUI : MonoBehaviour, IBeginDragHandler,IDragHandler, IEndDragHan
         //    Instantiate(prefab, spawnPos, Quaternion.identity);
         //    Debug.Log($"{_cardData.name} 소환 완료!");
         //}
+        //26-02-13 주현중 수정
         if (prefab == null)
         {
             return;
