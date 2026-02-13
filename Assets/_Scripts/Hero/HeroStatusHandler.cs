@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class HeroStatusHandler : MonoBehaviour
 {
-    [SerializeField] private HeroData _baseHeroData; //원본DB <- CSV 파서 들여오면 그걸로 수정. (tableName = table_herostat)
+    //[SerializeField] private HeroData _baseHeroData; //원본DB <- CSV 파서 들여오면 그걸로 수정. (tableName = table_herostat)
 
     //실시간 캐싱된 데이터값들
     private int _level;
@@ -19,7 +19,7 @@ public class HeroStatusHandler : MonoBehaviour
 
     // 프로퍼티
     public HeroStatus CurrentHeroStatus => _currentHeroStatus;
-    public string HeroID => _baseHeroData != null ? _baseHeroData.Hero_ID : string.Empty;
+    //public string HeroID => _baseHeroData != null ? _baseHeroData.Hero_ID : string.Empty;
     public int Level
     {
         get => _level;
@@ -59,11 +59,11 @@ public class HeroStatusHandler : MonoBehaviour
 
     private void Awake()
     {
-        if (_baseHeroData != null)
-        {
-            HeroManager.Instance.RegisterHeroHandler(_baseHeroData.Hero_ID, this);
-        }
-        else
+        //if (_baseHeroData != null)
+        //{
+        //    HeroManager.Instance.RegisterHeroHandler(_baseHeroData.Hero_ID, this);
+        //}
+        //else
         {
             Debug.LogError($"[HeroStatusHandler] {gameObject.name}에 HeroData가 할당되지 않았습니다.");
         }
@@ -81,8 +81,8 @@ public class HeroStatusHandler : MonoBehaviour
     // 레벨에 따른 Status변화 
     private void RefreshData()
     {
-        if (_baseHeroData == null || _baseHeroData.HeroStatus == null) return;
-        _currentHeroStatus = new HeroStatus(_baseHeroData.HeroStatus);
+        //if (_baseHeroData == null || _baseHeroData.HeroStatus == null) return;
+        //_currentHeroStatus = new HeroStatus(_baseHeroData.HeroStatus);
         ApplyLevelStatus(_currentHeroStatus, _level);
     }
 
@@ -100,6 +100,6 @@ public class HeroStatusHandler : MonoBehaviour
     // DB에 데이터 갱신 요청하는 메서드
     private void NotifyDataChanged()
     {
-        OnHeroDataChanged?.Invoke(_baseHeroData.Hero_ID, _level, _exp, _isUnlock);
+        //OnHeroDataChanged?.Invoke(_baseHeroData.Hero_ID, _level, _exp, _isUnlock);
     }
 }
