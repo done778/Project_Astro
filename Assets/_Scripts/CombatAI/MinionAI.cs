@@ -8,7 +8,7 @@ public class MinionAI : BaseAutoBattleAI
 {
     [Header("Advance")]
     [SerializeField] private Transform _enemyBase; //전진 목표
-    
+
     //미니언 전용 데이터 추가 예정
 
 
@@ -28,57 +28,28 @@ public class MinionAI : BaseAutoBattleAI
     //    }
     //}
 
-    protected override void UpdateState()
+
+    protected override void UpdateCombat()
     {
-        switch (currentState)
-        {
-            case AutoBattleState.Advance:
-                UpdateAdvance();
-                break;
-
-            case AutoBattleState.Combat:
-                UpdateCombat();
-                break;
-
-        }
-    }
-
-    private void UpdateAdvance()
-    {
-        //if (!HasAdvancePoint())//네트워크 연결전이라 주석처리
-        //{
-        //    return;
-        //}
-
-        MoveTo(finalGoal);
-
-        //이동 중 적 탐지
-        if (FindTarget())
-        {
-            ChangeState(AutoBattleState.Combat);
-        }
-    }
-
-    private void UpdateCombat()
-    {
-        //타겟이 유효하지 않으면 다시 이동
         if (!IsTargetValid())
         {
             ChangeState(AutoBattleState.Advance);
             return;
         }
 
-        //아직은 공격로직이 없음(공격로직이 생기면 추가할 위치)
+        float distance = Vector3.Distance(transform.position, currentTarget.position);
 
-        //타겟으로 이동
-        MoveTo(currentTarget.position);
+        if (distance > controller.AttackRange)
+        {
+            MoveTo(currentTarget.position);
+            return;
+        }
 
-        //if (controller.CanAttack(currentTarget))
-        //{
-        //    StopMove();
-        //    controller.Attack(currentTarget);
-        //}
+        StopMove();
+        controller.Attack(currentTarget);
     }
+}
+
 
     //팀과 공격타겟 설정등 셋업 (추상클래스로 이관)
     //public void Setup(Team team, Transform targetBase)
@@ -108,4 +79,4 @@ public class MinionAI : BaseAutoBattleAI
     //}
 
     //전투상태로 들어갈수있는지 판단하는 메서드 추가 예정
-}
+    //}

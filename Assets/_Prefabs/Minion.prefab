@@ -185,10 +185,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinionAI
   agent: {fileID: 8596131259578450949}
-  detectRadius: 7
+  finalGoal: {fileID: 0}
+  detectRadius: 5
   targetLayer:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 3221225664
   scanInterval: 0.5
   team: 0
   _enemyBase: {fileID: 0}
@@ -204,10 +205,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d380522b2ad33e4db63a2aa1f2bd383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinionController
-  _maxHealth: 100
-  _currentHealth: 100
+  _maxHealth: 50
+  _currentHealth: 50
   _attackDamage: 10
-  _attackRange: 1.5
+  _attackRange: 5
   _attackCooldown: 1
   _poolTag: 
   _attackType: 1

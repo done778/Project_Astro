@@ -20,7 +20,9 @@ public abstract class UnitController : MonoBehaviour
 
     protected float _nextAttackTime;
 
+    public float AttackRange => _attackRange;
     public virtual bool IsDead => _currentHealth <= 0f;
+    
 
     protected virtual void Awake()
     {
@@ -45,6 +47,17 @@ public abstract class UnitController : MonoBehaviour
 
     public abstract void Attack(Transform target);
 
+    public virtual bool InAttackRange(Transform target)
+    {
+        if (target == null)
+        {
+            return false;
+        }
+
+        float distance = Vector3.Distance(transform.position, target.position);
+
+        return distance <= _attackRange;
+    }
     public virtual void TakeDamage(float damage)
     {
         if (IsDead)

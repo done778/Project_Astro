@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
-using Fusion;
+﻿using Fusion;
 using UnityEngine;
 using UnityEngine.AI;
 
 //일단 임의로 상태 분리해둠
 public enum AutoBattleState { Advance, Combat }
+
+//공격 대상 우선순위 enum
+public enum AttackObjective { Unit, Tower, Main }
 
 /// <summary>
 /// 자동 전투 공통 AI로직 담당
@@ -15,6 +17,7 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
 {
     [Header("네비")]
     [SerializeField] protected NavMeshAgent agent;
+    [SerializeField] protected Transform finalGoal;
 
     [Header("탐지")]
     [SerializeField] protected float detectRadius = 10f;//탐지 범위
@@ -25,11 +28,15 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
     [SerializeField] protected Team team;
 
     protected AutoBattleState currentState;
-    protected Transform currentTarget;
+    protected Transform currentTarget; //유닛전투용
+    protected Transform currentObjective; //이동목표
+    protected AttackObjective currentObjectiveType;
+
     protected UnitController controller;
-    protected Vector3 finalGoal;//최종 목표
 
     private float _nextScanTime;
+
+    public Team Team => team;
 
     protected virtual void Awake()
     {
@@ -70,7 +77,20 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
         }
     }
 
-    protected abstract void UpdateState();//상태 업데이트(파생클래스에서 구현)
+    protected virtual void UpdateState()//상태 업데이트
+    {
+        switch (currentState)
+        {
+            case AutoBattleState.Advance:
+                UpdateAdvance();
+                break;
+
+            case AutoBattleState.Combat:
+                UpdateCombat();
+                break;
+
+        }
+    }
 
     protected void ChangeState(AutoBattleState nextState)//상태 전환 메서드
     {
@@ -82,6 +102,35 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
         StopMove();
         currentState = nextState;
     }
+
+    protected virtual void UpdateAdvance()
+    {
+        UpdateObjective();
+
+        if (currentObjective != null)
+        {
+            float distance = Vector3.Distance(
+                transform.position,
+                currentObjective.position
+            );
+
+            if (currentObjectiveType == AttackObjective.Tower && distance <= controller.AttackRange)
+            {
+                StopMove();
+                controller.Attack(currentObjective);
+                return;
+            }
+
+            MoveTo(currentObjective.position);
+        }
+
+        if (FindTarget())
+        {
+            ChangeState(AutoBattleState.Combat);
+        }
+    }
+
+    protected abstract void UpdateCombat();//파생 클래스에서 구현
 
     protected bool FindTarget()//가까운 적 거리 기준 찾기
     {
@@ -102,28 +151,77 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
 
         Collider[] hits = Physics.OverlapSphere(transform.position, detectRadius, targetLayer);
 
-        if (hits.Length == 0)
-        {
-            currentTarget = null;
-            return false;
-        }
-
         float minDistance = float.MaxValue;
         Transform closest = null;
 
         foreach (var hit in hits)
         {
-            float distance = Vector3.Distance(transform.position, hit.transform.position);
-
-            if (distance < minDistance)
+            UnitController unit = hit.GetComponent<UnitController>();
+            if (unit == null || unit.IsDead)
             {
-                minDistance = distance;
+                continue;
+            }
+
+            float dist = Vector3.Distance(transform.position, hit.transform.position);
+            if (dist < minDistance)
+            {
+                minDistance = dist;
                 closest = hit.transform;
             }
         }
 
         currentTarget = closest;
         return currentTarget != null;
+    }
+
+    protected void UpdateObjective()
+    {
+        //살아있는 가까운 적타워 찾기
+        Transform tower = FindNearestTower();
+        if (tower != null)
+        {
+            currentObjective = tower;
+            currentObjectiveType = AttackObjective.Tower;
+            return;
+        }
+
+        currentObjective = finalGoal;
+        currentObjectiveType = AttackObjective.Main;
+    }
+
+    protected Transform FindNearestTower()//가까운 타워 찾기
+    {
+        float minDistance = float.MaxValue;
+        Tower closest = null;
+
+        foreach (var tower in Tower.AliveTowers)
+        {
+            if (tower == null)
+            {
+                continue;
+            }
+
+            if (tower.Team == team)
+            {
+                continue;
+            }
+
+            float distance = Vector3.Distance(transform.position, tower.transform.position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closest = tower;
+            }
+        }
+
+        if (closest != null)
+        {
+            return closest.transform;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     protected bool IsTargetValid()//타겟 확인용 메서드
@@ -177,7 +275,7 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
 
         if (targetBase != null)
         {
-            finalGoal = targetBase.position;
+            finalGoal = targetBase;
         }
 
         ChangeState(AutoBattleState.Advance);
