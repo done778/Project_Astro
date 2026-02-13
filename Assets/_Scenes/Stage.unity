@@ -750,7 +750,7 @@ MonoBehaviour:
   _enemyBase: {fileID: 544860707}
   _baseSpawnCount: 3
   _bonusSpawnCount: 3
-  _spawnInterval: 5
+  _spawnInterval: 15
   _towers:
   - {fileID: 1910674111}
   - {fileID: 1992498372}
@@ -806,7 +806,7 @@ MonoBehaviour:
   _enemyBase: {fileID: 1431818093}
   _baseSpawnCount: 3
   _bonusSpawnCount: 3
-  _spawnInterval: 5
+  _spawnInterval: 15
   _towers:
   - {fileID: 286569285}
   - {fileID: 2099991296}
