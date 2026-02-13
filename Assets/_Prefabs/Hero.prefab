@@ -174,8 +174,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8b2f4a5a7e52254ca4ac142269bc711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeroController
-  _maxHealth: 100
-  _currentHealth: 100
+  _maxHealth: 80
+  _currentHealth: 80
   _attackDamage: 10
   _attackRange: 5
   _attackCooldown: 1
