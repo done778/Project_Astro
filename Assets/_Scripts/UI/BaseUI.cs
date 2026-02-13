@@ -4,6 +4,7 @@ public abstract class BaseUI : MonoBehaviour
 {
     [Header("기본 세팅")]
     [SerializeField] protected string _uiName;
+    public string UIName => _uiName;
 
     //열릴 때
     public virtual void Open()

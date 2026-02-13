@@ -70,6 +70,18 @@ public class UIManager : Singleton<UIManager>
     {
         if (prefab == null) return null;
 
+        //토글로직, 같은버튼 한번더 누르면 닫기
+        if (_popupStack.Count > 0)
+        {
+            BaseUI topUI = _popupStack.Peek();
+            // 프리팹의 이름이나 클래스 타입을 비교 (여기서는 간단하게 클래스 타입으로 비교)
+            if (topUI is T)
+            {
+                CloseTopPopup();
+                return null;
+            }
+        }
+
         GameObject obj = Instantiate(prefab, _popupRoot);
         T ui = obj.GetComponent<T>();
 
