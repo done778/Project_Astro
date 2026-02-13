@@ -57,6 +57,7 @@ public class UserDataStore : MonoBehaviour
     public void Initialize()
     {
         _firestore = FirebaseFirestore.DefaultInstance;
+        _firestore.Settings.PersistenceEnabled = false;
         Debug.Log("[Firestore] Firestore initialized");
     }
 

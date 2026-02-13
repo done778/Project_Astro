@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 
 public enum GameState { Ready,Play} //추후 상태 추가가능
+
+// 게임 매니저의 경우 아직 어떤 역할을 할지 구체적으로 정해지지 않음
+// 게임 전체 흐름을 관리할 것 같음. 어떤식으로 관리할지 설계해야 함.
+
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private GameState _currentState = GameState.Ready;
