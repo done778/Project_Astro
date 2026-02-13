@@ -1,58 +1,87 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SwipeUI : MonoBehaviour
+public class SwipeUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler
 {
-    [SerializeField] private ScrollRect scrollRect;
-    [SerializeField] private RectTransform content;
-    [SerializeField] private Image[] dots; // 하단 점 UI 배열
-    [SerializeField] private Color activeColor; // 활성화된 점 색상
-    [SerializeField] private Color inactiveColor; // 비활성화된 점 색상
+    [Header("연결할 컴포넌트들")]
+    [SerializeField] private ScrollRect _scrollRect;
+    [SerializeField] private RectTransform _content;
+    [SerializeField] private Image[] _dots; // 하단 점 UI 배열
 
-    private float[] pagePositions;
-    private int pageCount;
-    private int currentPage = 0;
+    [Header("세팅")]
+    [SerializeField] private Color _activeColor; // 활성화된 점 색상
+    [SerializeField] private Color _inactiveColor; // 비활성화된 점 색상
+    [SerializeField] private float _lerpSpeed = 10f;
+
+    private float[] _pagePositions;
+    private int _pageCount;
+    private int _currentPage = 0;
+    private bool _isDragging = false;
 
     void Start()
     {
-        pageCount = content.childCount;
-        pagePositions = new float[pageCount];
+        _pageCount = _content.childCount;
+        _pagePositions = new float[_pageCount];
 
         // 각 페이지의 스크롤 위치값 계산 (0~1 사이)
-        for (int i = 0; i < pageCount; i++)
+        for (int i = 0; i < _pageCount; i++)
         {
-            pagePositions[i] = (float)i / (pageCount - 1);
+            _pagePositions[i] = (float)i / (_pageCount - 1);
         }
     }
 
     void Update()
     {
-        // 드래그 중이 아닐 때 가장 가까운 페이지로 보간(Lerp) 이동
-        if (!Input.GetMouseButton(0))
-        {
-            float targetPos = pagePositions[currentPage];
-            scrollRect.horizontalNormalizedPosition = Mathf.Lerp(scrollRect.horizontalNormalizedPosition, targetPos, Time.deltaTime * 10f);
-        }
+        if (_isDragging) return;
 
-        UpdateDots();
+        // 가장 가까운 페이지로 부드럽게 이동
+        float targetPos = _pagePositions[_currentPage];
+        if(Mathf.Abs(_scrollRect.horizontalNormalizedPosition - targetPos) > 0.001f)
+        {
+            _scrollRect.horizontalNormalizedPosition = Mathf.Lerp
+                (
+                    _scrollRect.horizontalNormalizedPosition, 
+                    targetPos,
+                    Time.deltaTime * _lerpSpeed
+                );
+        }
     }
 
-    void UpdateDots()
+    public void OnBeginDrag(PointerEventData eventData)
     {
-        // 현재 스크롤 위치에서 가장 가까운 페이지 인덱스 찾기
-        float currentPos = scrollRect.horizontalNormalizedPosition;
+        _isDragging = true;
+    }
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        _isDragging = false;
+
+        // 드래그가 끝난 시점의 위치에서 가장 가까운 페이지 계산
+        float currentPos = _scrollRect.horizontalNormalizedPosition;
+        int nearestPage = 0;
         float minDistance = float.MaxValue;
 
-        for (int i = 0; i < pageCount; i++)
+        for (int i = 0; i < _pageCount; i++)
         {
-            float distance = Mathf.Abs(currentPos - pagePositions[i]);
+            float distance = Mathf.Abs(currentPos - _pagePositions[i]);
             if (distance < minDistance)
             {
                 minDistance = distance;
-                currentPage = i;
+                nearestPage = i;
             }
-            dots[i].color = inactiveColor;
         }
-        dots[currentPage].color = activeColor;
+
+        if (_currentPage != nearestPage)
+        {
+            _currentPage = nearestPage;
+            UpdateDots(_currentPage);
+        }
+    }
+    private void UpdateDots(int index)
+    {
+        for (int i = 0; i < _dots.Length; i++)
+        {
+            _dots[i].color = (i == index) ? _activeColor : _inactiveColor;
+        }
     }
 }
