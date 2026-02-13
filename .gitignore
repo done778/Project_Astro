@@ -81,6 +81,7 @@ crashlytics-build.properties
 # Third-party Assets
 /[Aa]ssets/SecurityAssets/
 /[Aa]ssets/Plugins/Demigiant/
+/[Aa]ssets/GeneratedLocalRepo/
 
 # Visual Studio Code (VSC)
 .vscode/
