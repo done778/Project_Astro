@@ -2,8 +2,16 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/* 
+모든 UI 패널들은 BaseUI를 상속받으며 
+UI 매니저를 통해서 관리되어야 한다.
+나중에 모바일 환경임을 고려해서 리팩토링을 해야한다.
+*/
+
 public class UIManager : Singleton<UIManager>
 {
+    // 싱글톤이라 인스펙터에서 직접 꽂으면 씬 전환시 참조를 잃어버리는 문제 있음
+    // 추 후 리팩토링 예정
     [Header("UI 부모 설정")]
     [SerializeField] private Transform _windowRoot;
     [SerializeField] private Transform _popupRoot;
@@ -33,6 +41,7 @@ public class UIManager : Singleton<UIManager>
             _backAction.action.performed -= OnBackInputPerformed;
         }
     }
+
     private void OnBackInputPerformed(InputAction.CallbackContext context)
     {
         if (_popupStack.Count > 0)

@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 
 /*
-    DB에서 Key / Value로 이루어진 Dictional를 통하여
+    DB에서 Key / Value로 이루어진 Dictionary를 통하여
     해당 클라이언트의 유닛인
     Key : Hero ID값 / Value : Level값 을 통하여 데이터 핸들링 하는 작업 할 공간.
+    아웃 게임 요소로 레벨에 따른 능력치 변화 값만 계산
  */
 
 public class HeroStatusHandler : MonoBehaviour
