@@ -109,10 +109,7 @@ public abstract class BaseAutoBattleAI : NetworkBehaviour
 
         if (currentObjective != null)
         {
-            float distance = Vector3.Distance(
-                transform.position,
-                currentObjective.position
-            );
+            float distance = Vector3.Distance(transform.position, currentObjective.position);
 
             if (currentObjectiveType == AttackObjective.Tower && distance <= controller.AttackRange)
             {
