@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
-public enum MinionAttackType
+public enum AttackType
 {
     Melee, Range
 }
 public class MinionController : UnitController
 {
-    [Header("미니언 타입")]
-    [SerializeField] private MinionAttackType _attackType;
+    [Header("공격 타입")]
+    [SerializeField] private AttackType _attackType;
 
     [Header("원거리")]
     [SerializeField] private GameObject _projectilePrefab;
@@ -33,11 +33,11 @@ public class MinionController : UnitController
 
         switch (_attackType)
         {
-            case MinionAttackType.Melee:
+            case AttackType.Melee:
                 AttackMelee(target);
                 break;
 
-            case MinionAttackType.Range:
+            case AttackType.Range:
                 AttackRanged(target);
                 break;
         }

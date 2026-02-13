@@ -189,7 +189,7 @@ MonoBehaviour:
   detectRadius: 5
   targetLayer:
     serializedVersion: 2
-    m_Bits: 3221225664
+    m_Bits: 192
   scanInterval: 0.5
   team: 0
   _enemyBase: {fileID: 0}
