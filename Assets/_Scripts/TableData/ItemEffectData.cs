@@ -11,7 +11,6 @@ public class ItemEffectData : ITableData
     public string triggerValue;
     public int target;
     public string note;
-    public string note;
 
     public string PrimaryID => id.ToString();
 }
