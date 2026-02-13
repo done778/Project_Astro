@@ -2,9 +2,9 @@
 
 public class UserDataManager : Singleton<UserDataManager>
 {
-    private UserData _userData;
+    private UserDbModle _userData;
 
-    public void ApplyFromFirestore(UserData data)
+    public void ApplyFromFirestore(UserDbModle data)
     {
         _userData = data;
     }

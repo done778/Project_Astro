@@ -27,12 +27,25 @@ public class HeroManager : Singleton<HeroManager>
         Debug.Log($"[HeroManager] {dbHeroList.Count}종의 영웅 데이터 동기화 완료.");
     }
 
-    // 3. 특정 영웅만 레벨업 시 사용
-    public void SyncWithDB(string heroId, int level)
+    // 3. 특정 영웅 DB정보 변경 시 사용
+    public void SyncWithDB(string heroId, int level, int exp ,bool isUnlock)
     {
         if (_activeHeroes.TryGetValue(heroId, out var handler))
         {
-            handler.Initialize(level, handler.Exp, true); // 레벨만 갱신
+            handler.Initialize(level, exp, isUnlock);
+        }
+    }
+
+    // 4. 데이터 갱신 이벤트 처리
+    public void BindSaveEvents(string userUuid, UserDataStore dataStore)
+    {
+        foreach (var handler in _activeHeroes.Values)
+        {
+            // 영웅의 데이터가 바뀔 때마다 DB 업데이트 메서드 호출
+            handler.OnHeroDataChanged += (heroId, level, exp, unlock) =>
+            {
+                _ = dataStore.UpdateHeroDataAsync(userUuid, heroId, level, exp, unlock);
+            };
         }
     }
 }
