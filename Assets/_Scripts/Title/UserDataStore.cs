@@ -95,15 +95,8 @@ public class UserDataStore : MonoBehaviour
         var userData = snapshot.ConvertTo<UserData>();
 
         // TODO : UserDataManager에 적용 (싱글톤 패턴 사용 시)
-        //if (UserDataManager.Instance != null)
-        //{
-        //    UserDataManager.Instance.ApplyFromFirestore(
-        //        userData.uuid,
-        //        userData.nickName,
-        //        userData.win,
-        //        userData.lose
-        //    );
-        //}
+        if (UserDataManager.Instance != null)
+            UserDataManager.Instance.ApplyFromFirestore(userData);
 
         return userData;
     }
