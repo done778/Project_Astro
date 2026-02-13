@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -41,11 +41,30 @@ public class CardUI : MonoBehaviour, IBeginDragHandler,IDragHandler, IEndDragHan
     private void SpawnUnit(Vector3 spawnPos)
     {
         GameObject prefab = GetUnitPrefab();
-        if (prefab != null)
+        //if (prefab != null)
+        //{
+        //    Instantiate(prefab, spawnPos, Quaternion.identity);
+        //    Debug.Log($"{_cardData.name} 소환 완료!");
+        //}
+        //26-02-13 주현중 수정
+        if (prefab == null)
         {
-            Instantiate(prefab, spawnPos, Quaternion.identity);
-            Debug.Log($"{_cardData.name} ��ȯ �Ϸ�!");
+            return;
         }
+
+        GameObject heroObj = Instantiate(prefab, spawnPos, Quaternion.identity);
+
+        BaseAutoBattleAI ai = heroObj.GetComponent<BaseAutoBattleAI>();
+        if (ai != null)
+        {
+            //임시 팀
+            Team myTeam = Team.Blue; //나중에 교체
+
+            //일단 null
+            ai.Setup(myTeam, null);
+        }
+
+        Debug.Log($"{_cardData.name} 소환 완료!");
     }
 
     public GameObject GetUnitPrefab()
