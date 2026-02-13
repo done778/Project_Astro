@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class HeroManager : Singleton<HeroManager>
@@ -21,7 +22,7 @@ public class HeroManager : Singleton<HeroManager>
         {
             if (_activeHeroes.TryGetValue(dbData.heroId, out var handler))
             {
-                handler.Initialize(dbData.level, dbData.exp, dbData.isUnlocked);
+                handler.Initialize(dbData.level, dbData.exp, dbData.isUnlock);
             }
         }
         Debug.Log($"[HeroManager] {dbHeroList.Count}종의 영웅 데이터 동기화 완료.");
@@ -34,6 +35,14 @@ public class HeroManager : Singleton<HeroManager>
         {
             handler.Initialize(level, exp, isUnlock);
         }
+
+        var cachedHero = UserDataManager.Instance.HeroesModel.Find(h => h.heroId == heroId);
+        if (cachedHero != null)
+        {
+            cachedHero.level = level;
+            cachedHero.exp = exp;
+            cachedHero.isUnlock = isUnlock;
+        }
     }
 
     // 4. 데이터 갱신 이벤트 처리
@@ -44,7 +53,15 @@ public class HeroManager : Singleton<HeroManager>
             // 영웅의 데이터가 바뀔 때마다 DB 업데이트 메서드 호출
             handler.OnHeroDataChanged += (heroId, level, exp, unlock) =>
             {
-                _ = dataStore.UpdateHeroDataAsync(userUuid, heroId, level, exp, unlock);
+                Task.Run(async () => await dataStore.UpdateHeroDataAsync(userUuid, heroId, level, exp, unlock));
+
+                var cached = UserDataManager.Instance.HeroesModel.Find(h => h.heroId == heroId);
+                if (cached != null)
+                {
+                    cached.level = level;
+                    cached.exp = exp;
+                    cached.isUnlock = unlock;
+                }
             };
         }
     }

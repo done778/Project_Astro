@@ -5,7 +5,7 @@ using UnityEngine;
 
 #region Firestore Datas
 [FirestoreData]
-public class UserDbModle
+public class UserDbModel
 {
     [FirestoreProperty] public string uuid { get; set; }
     [FirestoreProperty] public string nickName { get; set; }
@@ -20,18 +20,18 @@ public class HeroDbModel
     [FirestoreProperty] public string heroId { get; set; }
     [FirestoreProperty] public int level { get; set; }
     [FirestoreProperty] public int exp { get; set; }
-    [FirestoreProperty] public bool isUnlocked { get; set; }
+    [FirestoreProperty] public bool isUnlock { get; set; }
 }
 
 [FirestoreData]
-public class Record
+public class RecordModel
 {
     [FirestoreProperty] public int win { set; get; }
     [FirestoreProperty] public int lose { set; get; }
 }
 
 [FirestoreData]
-public class Wallet
+public class WalletModel
 {
     [FirestoreProperty] public int gold { set; get; }
 }
@@ -44,15 +44,15 @@ public class UserDataStore : MonoBehaviour
 {
     private FirebaseFirestore _firestore;
     private const string COLLECTION_NAME = "users";
-    private const string COLLECTION_PROFILE = "Profile";
-    private const string COLLECTION_RECORD = "Record";
-    private const string COLLECTION_HERO = "Hero";
-    private const string COLLECTION_WALLET = "Wallet";
+    private const string COLLECTION_PROFILE = "COL_Profile";
+    private const string COLLECTION_RECORD = "COL_Record";
+    private const string COLLECTION_HERO = "COL_Hero";
+    private const string COLLECTION_WALLET = "COL_Wallet";
 
-    private const string DOCUMENT_PROFILE = "Profile";
-    private const string DOCUMENT_RECORD = "Record";
-    private const string DOCUMENT_HERO = "Hero";
-    private const string DOCUMENT_WALLET = "Wallet";
+    private const string DOCUMENT_PROFILE = "DOC_Profile";
+    private const string DOCUMENT_RECORD = "DOC_Record";
+    //private const string DOCUMENT_HERO = "DOC_Hero";
+    private const string DOCUMENT_WALLET = "DOC_Wallet";
 
     public void Initialize()
     {
@@ -105,7 +105,7 @@ public class UserDataStore : MonoBehaviour
             // 4. 지갑(재화) 정보 생성
             var Wallet = new Dictionary<string, object>
             {
-                { "Gold", 0 }
+                { "gold", 0 }
             };
             await userDocRef.Collection(COLLECTION_WALLET).Document(DOCUMENT_WALLET).SetAsync(Wallet);
 
@@ -119,7 +119,7 @@ public class UserDataStore : MonoBehaviour
 
     #region DB Search
     // 유저 데이터 조회(uuid, 닉네임,경험치, 레벨, 생성 날짜 정보 사용)
-    public async Task<UserDbModle> GetUserDataAsync(string uuid)
+    public async Task<UserDbModel> GetUserDataAsync(string uuid)
     {
         var snapshot = await _firestore
             .Collection(COLLECTION_NAME)
@@ -134,7 +134,7 @@ public class UserDataStore : MonoBehaviour
             return null;
         }
 
-        var userData = snapshot.ConvertTo<UserDbModle>();
+        var userData = snapshot.ConvertTo<UserDbModel>();
 
         // TODO : UserDataManager에 적용 (싱글톤 패턴 사용 시)
         //if (UserDataManager.Instance != null)
@@ -183,7 +183,7 @@ public class UserDataStore : MonoBehaviour
     }
 
     // 전적 정보 조회(유저 Win, Lose 정보 사용)
-    public async Task<Record> GetUserRecordDataAsync(string uuid)
+    public async Task<RecordModel> GetUserRecordDataAsync(string uuid)
     {
         var snapshot = await _firestore
             .Collection(COLLECTION_NAME)
@@ -197,13 +197,13 @@ public class UserDataStore : MonoBehaviour
             Debug.LogWarning($"[Firestore] User data not found for UUID: {uuid}");
             return null;
         }
-        var userData = snapshot.ConvertTo<Record>();
+        var userData = snapshot.ConvertTo<RecordModel>();
 
         return userData;
     }
 
     // 지갑 정보 조회(유저 보유 골드 등)
-    public async Task<Wallet> GetUserWalletDataAsync(string uuid)
+    public async Task<WalletModel> GetUserWalletDataAsync(string uuid)
     {
         var snapshot = await _firestore
             .Collection(COLLECTION_NAME)
@@ -217,7 +217,7 @@ public class UserDataStore : MonoBehaviour
             Debug.LogWarning($"[Firestore] User data not found for UUID: {uuid}");
             return null;
         }
-        var userData = snapshot.ConvertTo<Wallet>();
+        var userData = snapshot.ConvertTo<WalletModel>();
 
         return userData;
     }
@@ -257,7 +257,7 @@ public class UserDataStore : MonoBehaviour
         });
     }
 
-    // 영웅의 값 변화에 따른 이벤트성 업데이트
+    // 영웅의 값 업데이트
     public async Task UpdateHeroDataAsync(string uuid, string heroId, int level, int exp, bool isUnlock)
     {
         var heroDocRef = _firestore.Collection(COLLECTION_NAME).Document(uuid)
@@ -304,9 +304,9 @@ public class UserDataStore : MonoBehaviour
     // 닉네임 중복 체크
     public async Task<bool> IsNicknameDuplicateAsync(string nickname)
     {
-        var query = await _firestore
-            .Collection(COLLECTION_NAME)
-            .WhereEqualTo("nickName", nickname)
+        var query = await _firestore.
+            Collection(COLLECTION_PROFILE).
+            WhereEqualTo("nickName", nickname)
             .GetSnapshotAsync();
 
         return query.Count > 0;

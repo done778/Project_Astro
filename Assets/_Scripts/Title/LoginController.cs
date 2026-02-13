@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using static UnityEditor.AddressableAssets.Build.Layout.BuildLayout;
 
 // 로그인 관련 비즈니스 로직
 public class LoginController : MonoBehaviour
@@ -44,6 +45,9 @@ public class LoginController : MonoBehaviour
 
             // 2단계: Firestore에서 유저 데이터 조회
             var userData = await _userDataStore.GetUserDataAsync(user.UserId);
+            var userHeroData = await _userDataStore.GetUserHeroDataAsync(user.UserId);
+            var userRecordData = await _userDataStore.GetUserRecordDataAsync(user.UserId);
+            var userWalletData = await _userDataStore.GetUserWalletDataAsync(user.UserId);
 
             if (userData == null)
             {
@@ -55,6 +59,9 @@ public class LoginController : MonoBehaviour
             // 3단계: 로그인 성공
             _loginView.ShowWelcomeMessage(userData.nickName);
             _onLoginSuccess?.Invoke(userData.nickName);
+
+            // 4단계: DB 데이터 캐싱
+            UserDataManager.Instance.SetAllUserData(userData, userRecordData, userWalletData, userHeroData);
         }
         catch (Exception ex)
         {
