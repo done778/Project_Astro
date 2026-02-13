@@ -3,13 +3,13 @@
 [Serializable]
 public class ItemData : ITableData
 {
-    public int ItemID;
-    public string Name;
-    public int Type;
-    public int EffectGroupID;
-    public string IconImage;
-    public bool IsStackable;
-    public string Description;
+    public string id;
+    public string name;
+    public int type;
+    public string iconImage;
+    public string effectGroupId;
+    public bool isStackable;
+    public string note;
 
-    public string PrimaryID => ItemID.ToString();
+    public string PrimaryID => id.ToString();
 }
