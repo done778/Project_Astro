@@ -11,6 +11,8 @@ public class TableManager : Singleton<TableManager>
     public TableBase<ItemData> ItemTable = new TableBase<ItemData>();
     public TableBase<HeroData> HeroTable = new TableBase<HeroData>();
     public TableBase<ItemEffectData> ItemEffectTable = new TableBase<ItemEffectData>();
+    public TableBase<ConfigData> ConfigTable = new TableBase<ConfigData>();
+    public TableBase<StringData> StringTable = new TableBase<StringData>();
 
 
     protected override void Awake()
@@ -32,8 +34,6 @@ public class TableManager : Singleton<TableManager>
             if (field.FieldType.Name.Contains("TableBase"))
             {
                 //변수 이름을 가져오기
-
-                //테이블받아오면 다시 수정
 
                 //2.14 수정, 변수명에서 Table 떼고 어드레서블 주소 만들기
                 string addressKey = field.Name.Replace("Table", "");

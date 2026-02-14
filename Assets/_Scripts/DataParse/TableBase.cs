@@ -52,7 +52,7 @@ public class TableBase<T> where T : class, ITableData, new()
         }
         else
         {
-            Debug.LogError($"어드레서블 로드 실패, 주소: {address} \n에러: {handle.OperationException}");
+            Debug.LogError($"어드레서블 로드 실패, 주소: {address}");
         }
     }
 
