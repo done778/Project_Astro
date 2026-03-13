@@ -68,7 +68,7 @@ public enum SkillType
     NormalAttack,
     NormalSkill,
     AugmentSkill,
-    AugmentSkillEnhance,
+    EnhanceAugmentSkill,
     PassiveSkill
 }
 
@@ -119,4 +119,13 @@ public enum StatType
 public enum Team
 {
     None, Blue, Red
+}
+
+//3.11 추가
+
+public enum MatchResult
+{
+    Win,
+    Draw,
+    Lose
 }

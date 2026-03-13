@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using Fusion;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -7,6 +8,7 @@ using UnityEngine.UI;
 // Stage 씬 인게임 시퀀스에 쓰이는 UI들을 제어하는 클래스
 public class StageUI : MonoBehaviour
 {
+    [SerializeField] private GameObject _loadingPanel;
     [SerializeField] private GameObject _vsPanel;
     [SerializeField] private GameObject[] _rotationPanel;
     [SerializeField] private TextMeshProUGUI[] _introNameLabel;
@@ -25,6 +27,12 @@ public class StageUI : MonoBehaviour
     [SerializeField] private Transform _heroListPanel;
     [SerializeField] private TextMeshProUGUI _resultGoldText;
 
+    [Header("채팅 앵커")]
+    [SerializeField] private Transform _myAnchor;
+    [SerializeField] private Transform _teammateAnchor;
+    [SerializeField] private Transform _enemy1Anchor;
+    [SerializeField] private Transform _enemy2Anchor;
+
     public Button goLobbyBtn;
     private MatchType _matchType;
 
@@ -32,6 +40,11 @@ public class StageUI : MonoBehaviour
     {
         _countdownIndicator.gameObject.SetActive(false);
         _resultPanel.gameObject.SetActive(false);
+    }
+
+    public void SetMaxValueAugmentSlider(int value)
+    {
+        _augmentGauge.maxValue = value;
     }
 
     public void LocalInitialize(MatchType matchType, Team team)
@@ -70,57 +83,59 @@ public class StageUI : MonoBehaviour
         int maxPlayers = _matchType == MatchType.OneVsOne ? 2 : 4;
         int teamSize = maxPlayers / 2;
 
-        List<string> myTeamNames = new List<string>();
-        List<string> enemyTeamNames = new List<string>();
-
-        Team myTeam = Team.Blue;
+        List<string> BlueTeamNames = new List<string>();
+        List<string> RedTeamNames = new List<string>();
 
         // 넘어온 데이터가 있다면 팀별로 안전하게 분류
         if (playersData != null)
         {
-            myTeam = playersData[0].Team;
             foreach (var player in playersData)
             {
-                if (player.Team == myTeam)
-                    myTeamNames.Add(player.PlayerName.ToString());
+                if (player.Team == Team.Blue)
+                    BlueTeamNames.Add(player.PlayerName.ToString());
                 else
-                    enemyTeamNames.Add(player.PlayerName.ToString());
+                    RedTeamNames.Add(player.PlayerName.ToString());
             }
         }
 
         // 배열 길이가 부족하다면(빈자리가 있다면) "Dummy"로 채워 넣기
-        while (myTeamNames.Count < teamSize)
-            myTeamNames.Add("Dummy");
+        while (BlueTeamNames.Count < teamSize)
+            BlueTeamNames.Add("Dummy");
 
-        while (enemyTeamNames.Count < teamSize)
-            enemyTeamNames.Add("Dummy");
+        while (RedTeamNames.Count < teamSize)
+            RedTeamNames.Add("Dummy");
 
         // 인트로 UI 적용 (0, 2번 슬롯은 Blue / 1, 3번 슬롯은 Red로 짝지어짐)
         if (_introNameLabel.Length >= 2)
         {
-            _introNameLabel[0].text = myTeamNames[0];
-            _introNameLabel[1].text = enemyTeamNames[0];
+            _introNameLabel[0].text = BlueTeamNames[0];
+            _introNameLabel[1].text = RedTeamNames[0];
         }
 
         if (_matchType == MatchType.TwoVsTwo && _introNameLabel.Length >= 4)
         {
-            _introNameLabel[2].text = myTeamNames[1];
-            _introNameLabel[3].text = enemyTeamNames[1]; 
+            _introNameLabel[2].text = BlueTeamNames[1];
+            _introNameLabel[3].text = RedTeamNames[1]; 
         }
+
+        Team myTeam = playersData[0].Team;
 
         // 인게임 UI 적용 (기존 로직의 흐름을 유지하되 인덱스 에러 방지)
         if (_ingameEnemyNameLabel.Length > 0)
-            _ingameEnemyNameLabel[0].text = enemyTeamNames[0]; // 적 1
+            _ingameEnemyNameLabel[0].text = myTeam == Team.Blue ? RedTeamNames[0] : BlueTeamNames[0]; // 적 1
 
         if (_matchType == MatchType.TwoVsTwo)
         {
             if (_teamMemberSlot != null)
-                _teamMemberSlot.transform.GetComponentInChildren<TextMeshProUGUI>().text = myTeamNames[1]; // 아군
+                _teamMemberSlot.transform.GetComponentInChildren<TextMeshProUGUI>().text =
+                    myTeam == Team.Blue ? BlueTeamNames[1] : RedTeamNames[1]; // 아군
 
             if (_ingameEnemyNameLabel.Length > 1)
-                _ingameEnemyNameLabel[1].text = enemyTeamNames[1]; // 적 2
+                _ingameEnemyNameLabel[1].text =
+                    myTeam == Team.Blue ? RedTeamNames[1] : BlueTeamNames[1]; // 아군; // 적 2
         }
 
+        _loadingPanel.SetActive(false);
         _vsPanel.SetActive(true);
         Debug.Log("매칭된 플레이어 정보를 보여줌");
     }
@@ -162,8 +177,8 @@ public class StageUI : MonoBehaviour
 
     public void UpdateAugmentGauge(int value)
     {
-        _augmentGauge.value = value;
-        if (_augmentGauge.value >= 100f)
+        _augmentGauge.value = Mathf.Min(_augmentGauge.maxValue, value);
+        if (_augmentGauge.value >= _augmentGauge.maxValue)
             AugmentManager.Instance.ShowAugmentToggleBtn();
         else
             AugmentManager.Instance.HideAugmentToggleBtn();
@@ -196,5 +211,23 @@ public class StageUI : MonoBehaviour
         }
 
         _resultPanel.SetActive(true);
+    }
+
+    public Transform GetChatAnchor(PlayerRef sender, PlayerRef localPlayer, Team senderTeam, Team myTeam, PlayerRef[] enemyRefs)
+    {
+        // 나 자신
+        if (sender == localPlayer) return _myAnchor;
+
+        // 아군
+        if (senderTeam == myTeam) return _teammateAnchor;
+
+        // 적군 구분 (적 배열과 비교)
+        if (enemyRefs != null)
+        {
+            if (sender == enemyRefs[0]) return _enemy1Anchor;
+            if (enemyRefs.Length > 1 && sender == enemyRefs[1]) return _enemy2Anchor;
+        }
+
+        return _enemy1Anchor; // 기본값
     }
 }
